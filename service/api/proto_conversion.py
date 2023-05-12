@@ -97,11 +97,11 @@ class ProtoConverter:
           data_store_pb2.EpisodeChunk: episode_pb2.EpisodeChunk,
           data_store_pb2.Session: session_pb2.Session,
       }
-    target_proto_type = ProtoConverter._PROTO_MAP.get(source_proto_type)
-    if not target_proto_type:
+    if target_proto_type := ProtoConverter._PROTO_MAP.get(source_proto_type):
+      return target_proto_type
+    else:
       raise ValueError(f'Proto {source_proto_type} could not be mapped to any '
                        'proto.')
-    return target_proto_type
 
   @staticmethod
   def _get_target_type_or_name(field_name, source_proto_type,
@@ -216,9 +216,8 @@ class ProtoConverter:
     converted_proto = target_proto_type()
 
     for field_name in data_store_proto.DESCRIPTOR.fields_by_name:
-      target_name = ProtoConverter._get_target_type_or_name(
-          field_name, data_store_proto_type, target_proto_type)
-      if target_name:
+      if target_name := ProtoConverter._get_target_type_or_name(
+          field_name, data_store_proto_type, target_proto_type):
         if target_name == target_proto_type:
           converted_proto = getattr(data_store_proto, field_name)
         else:

@@ -68,5 +68,4 @@ class HashtableImportOptionsT(object):
     # HashtableImportOptionsT
     def Pack(self, builder):
         HashtableImportOptionsStart(builder)
-        hashtableImportOptions = HashtableImportOptionsEnd(builder)
-        return hashtableImportOptions
+        return HashtableImportOptionsEnd(builder)

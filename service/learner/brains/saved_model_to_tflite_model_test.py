@@ -172,7 +172,9 @@ class SavedModelToTFLiteModelTest(absltest.TestCase):
       inputs_and_outputs.append((
           tensor.name.decode(
               saved_model_to_tflite_model._FLATBUFFERS_TEXT_ENCODING),
-          tensor.type, repr([d for d in shape])))
+          tensor.type,
+          repr(list(shape)),
+      ))
 
     self.assertCountEqual(
         inputs_and_outputs,
@@ -250,6 +252,8 @@ class SavedModelToTFLiteModelTest(absltest.TestCase):
         offset += 1
         bits >>= 1
 
+
+
       class Lout(tf.Module):
         """Test module that provides a signature to serialize."""
 
@@ -264,12 +268,12 @@ class SavedModelToTFLiteModelTest(absltest.TestCase):
           super(Lout, self).__init__(**kwargs)
 
         @tf.function(input_signature=[
-            tf.TensorSpec((1,), dtype=tf.float32, name='player/drink/booze'),
-            tf.TensorSpec((1,), dtype=tf.float32, name='player/drink/water'),
-            tf.TensorSpec((1,), dtype=tf.int32, name='player/drink/bubbles'),
-        ])
+                  tf.TensorSpec((1,), dtype=tf.float32, name='player/drink/booze'),
+                  tf.TensorSpec((1,), dtype=tf.float32, name='player/drink/water'),
+                  tf.TensorSpec((1,), dtype=tf.int32, name='player/drink/bubbles'),
+              ])
         def __call__(self, ethanol, h2o,
-                     carbonation) -> typing.Iterable[tf.Tensor]:
+                           carbonation) -> typing.Iterable[tf.Tensor]:
           """Generate a set of outputs.
 
           The values of the outputs are _not_ used by the test case.
@@ -282,11 +286,12 @@ class SavedModelToTFLiteModelTest(absltest.TestCase):
           Returns:
             Dictionary of outputs whose names match _output_names.
           """
-          output_tensors = {}
-          for index, output in enumerate(self._output_names.numpy()):
-            output_tensors[output.decode()] = tf.identity(
-                (ethanol - h2o) * float(index % carbonation), name=output)
-          return output_tensors
+          return {
+              output.decode(): tf.identity(
+                  (ethanol - h2o) * float(index % carbonation), name=output)
+              for index, output in enumerate(self._output_names.numpy())
+          }
+
 
       # Call the function at least once to instance.
       lout = Lout(selected, name=f'Lout{combination}')
@@ -301,12 +306,10 @@ class SavedModelToTFLiteModelTest(absltest.TestCase):
             saved_model_to_tflite_model._create_tflite_to_tf_tensor_name_map(
                 graph))
 
-        # Output tensors should be sorted by tensor name.
-        expected_output_map = {}
-        for index, output in enumerate(sorted(selected)):
-          expected_output_map[f'Identity_{index}'
-                              if index > 0 else 'Identity'] = output
-
+        expected_output_map = {
+            f'Identity_{index}' if index > 0 else 'Identity': output
+            for index, output in enumerate(sorted(selected))
+        }
         self.assertCountEqual(input_map, expected_input_map)
         self.assertCountEqual(output_map, expected_output_map)
 

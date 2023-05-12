@@ -68,5 +68,4 @@ class TopKV2OptionsT(object):
     # TopKV2OptionsT
     def Pack(self, builder):
         TopKV2OptionsStart(builder)
-        topKV2Options = TopKV2OptionsEnd(builder)
-        return topKV2Options
+        return TopKV2OptionsEnd(builder)

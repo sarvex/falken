@@ -78,5 +78,4 @@ class L2NormOptionsT(object):
     def Pack(self, builder):
         L2NormOptionsStart(builder)
         L2NormOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
-        l2NormOptions = L2NormOptionsEnd(builder)
-        return l2NormOptions
+        return L2NormOptionsEnd(builder)

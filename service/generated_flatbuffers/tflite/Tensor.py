@@ -56,9 +56,7 @@ class Tensor(object):
     # Tensor
     def ShapeLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Tensor
     def ShapeIsNone(self):
@@ -82,9 +80,7 @@ class Tensor(object):
     # Tensor
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
     # Tensor
     def Quantization(self):
@@ -133,9 +129,7 @@ class Tensor(object):
     # Tensor
     def ShapeSignatureLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Tensor
     def ShapeSignatureIsNone(self):
@@ -191,13 +185,12 @@ class TensorT(object):
     def _UnPack(self, tensor):
         if tensor is None:
             return
-        if not tensor.ShapeIsNone():
-            if np is None:
+        if np is None:
+            if not tensor.ShapeIsNone():
                 self.shape = []
-                for i in range(tensor.ShapeLength()):
-                    self.shape.append(tensor.Shape(i))
-            else:
-                self.shape = tensor.ShapeAsNumpy()
+                self.shape.extend(tensor.Shape(i) for i in range(tensor.ShapeLength()))
+        elif not tensor.ShapeIsNone():
+            self.shape = tensor.ShapeAsNumpy()
         self.type = tensor.Type()
         self.buffer = tensor.Buffer()
         self.name = tensor.Name()
@@ -209,8 +202,10 @@ class TensorT(object):
         if not tensor.ShapeSignatureIsNone():
             if np is None:
                 self.shapeSignature = []
-                for i in range(tensor.ShapeSignatureLength()):
-                    self.shapeSignature.append(tensor.ShapeSignature(i))
+                self.shapeSignature.extend(
+                    tensor.ShapeSignature(i)
+                    for i in range(tensor.ShapeSignatureLength())
+                )
             else:
                 self.shapeSignature = tensor.ShapeSignatureAsNumpy()
 
@@ -252,5 +247,4 @@ class TensorT(object):
             TensorAddSparsity(builder, sparsity)
         if self.shapeSignature is not None:
             TensorAddShapeSignature(builder, shapeSignature)
-        tensor = TensorEnd(builder)
-        return tensor
+        return TensorEnd(builder)

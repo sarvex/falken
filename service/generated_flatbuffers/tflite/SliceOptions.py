@@ -68,5 +68,4 @@ class SliceOptionsT(object):
     # SliceOptionsT
     def Pack(self, builder):
         SliceOptionsStart(builder)
-        sliceOptions = SliceOptionsEnd(builder)
-        return sliceOptions
+        return SliceOptionsEnd(builder)

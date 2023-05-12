@@ -87,8 +87,7 @@ class LearnerService:
     Returns:
       Absolute path of the temporary directory.
     """
-    directory = getattr(FLAGS, dir_property_name)
-    if directory:
+    if directory := getattr(FLAGS, dir_property_name):
       os.makedirs(directory, exist_ok=True)
       temp_dir = tempfile.TemporaryDirectory(prefix=dir_property_name,
                                              dir=directory)

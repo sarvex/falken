@@ -95,16 +95,11 @@ class Step(
     discount = np.array(1.0, dtype=np.float32)
 
     if self.phase == StepPhase.START:
-      time_step = ts.restart(tfa_observation)
-    elif self.phase == StepPhase.SUCCESS or self.phase == StepPhase.ABORTED:
-      time_step = ts.termination(tfa_observation, reward=reward)
-    elif self.phase == StepPhase.ABORTED:
-      time_step = ts.truncation(
-          tfa_observation, reward=reward, discount=discount)
+      return ts.restart(tfa_observation)
+    elif self.phase in [StepPhase.SUCCESS, StepPhase.ABORTED]:
+      return ts.termination(tfa_observation, reward=reward)
     else:
-      time_step = ts.transition(
-          tfa_observation, reward=reward, discount=discount)
-    return time_step
+      return ts.transition(tfa_observation, reward=reward, discount=discount)
 
   def get_action_step(self, action_spec):
     """Extract TFA action_step from step.
@@ -229,8 +224,7 @@ def episodes_to_trajectories(episodes, brain_spec):
     number of steps in batched_trajectory.
   """
   for episode in episodes:
-    trajectories = episode_steps_to_trajectories(episode, brain_spec)
-    if trajectories:
+    if trajectories := episode_steps_to_trajectories(episode, brain_spec):
       yield (batch_trajectories(trajectories), len(trajectories))
 
 

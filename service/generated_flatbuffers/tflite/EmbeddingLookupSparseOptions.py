@@ -78,5 +78,4 @@ class EmbeddingLookupSparseOptionsT(object):
     def Pack(self, builder):
         EmbeddingLookupSparseOptionsStart(builder)
         EmbeddingLookupSparseOptionsAddCombiner(builder, self.combiner)
-        embeddingLookupSparseOptions = EmbeddingLookupSparseOptionsEnd(builder)
-        return embeddingLookupSparseOptions
+        return EmbeddingLookupSparseOptionsEnd(builder)

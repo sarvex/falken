@@ -100,5 +100,4 @@ class HashtableOptionsT(object):
         HashtableOptionsAddTableId(builder, self.tableId)
         HashtableOptionsAddKeyDtype(builder, self.keyDtype)
         HashtableOptionsAddValueDtype(builder, self.valueDtype)
-        hashtableOptions = HashtableOptionsEnd(builder)
-        return hashtableOptions
+        return HashtableOptionsEnd(builder)

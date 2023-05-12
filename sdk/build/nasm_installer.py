@@ -72,10 +72,7 @@ class NasmInstaller:
       zipfile.BadZipFile: if unzipping fails.
       subprocess.CalledProcessError: If failed to set path.
     """
-    # Download installer.
-    installer_filename = self._download()
-
-    if installer_filename:
+    if installer_filename := self._download():
       # Unzip installer.
       self._unzip(installer_filename)
       # Add installer to path.

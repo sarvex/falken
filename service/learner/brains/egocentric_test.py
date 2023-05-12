@@ -25,9 +25,7 @@ import tensorflow as tf
 
 
 def tensor_to_list(t):
-  if isinstance(t, list):
-    return t
-  return t.numpy().tolist()
+  return t if isinstance(t, list) else t.numpy().tolist()
 
 
 def quat_from_string(quat_str):

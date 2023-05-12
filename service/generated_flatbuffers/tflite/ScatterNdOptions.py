@@ -68,5 +68,4 @@ class ScatterNdOptionsT(object):
     # ScatterNdOptionsT
     def Pack(self, builder):
         ScatterNdOptionsStart(builder)
-        scatterNdOptions = ScatterNdOptionsEnd(builder)
-        return scatterNdOptions
+        return ScatterNdOptionsEnd(builder)

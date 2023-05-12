@@ -68,5 +68,4 @@ class GreaterOptionsT(object):
     # GreaterOptionsT
     def Pack(self, builder):
         GreaterOptionsStart(builder)
-        greaterOptions = GreaterOptionsEnd(builder)
-        return greaterOptions
+        return GreaterOptionsEnd(builder)

@@ -71,8 +71,7 @@ def _log_items_to_string(log_items):
                     '%s.', key, log_items[key])
   lines = []
   for key in _LOG_KWARGS:
-    value = log_items.get(key)
-    if value:
+    if value := log_items.get(key):
       lines.append(f' {key}: {value}')
   return '\n'.join(lines)
 

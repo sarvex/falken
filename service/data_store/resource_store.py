@@ -150,20 +150,13 @@ class ResourceStore:
 
     if not timestamp_micros:
       # Caller did not provide an explicit timestamp.
-      if read_timestamp:
-        # If this is an existing object in the filesystem, use its timestamp.
-        timestamp_micros = read_timestamp
-      else:
-        # Create a new timestamp
-        timestamp_micros = self.get_timestamp_in_microseconds()
+      timestamp_micros = (read_timestamp if read_timestamp else
+                          self.get_timestamp_in_microseconds())
       self._resolver.set_timestamp_micros(resource, timestamp_micros)
-    else:
-      # If the user-provided timestamp and timestamp read from the file system
-      # disagree, raise an error.
-      if read_timestamp and read_timestamp != timestamp_micros:
-        raise ValueError(
-            'Resource already exists with a different timestamp: \n'
-            f'resource: {resource}\nexisting timestamp: {read_timestamp}')
+    elif read_timestamp and read_timestamp != timestamp_micros:
+      raise ValueError(
+          'Resource already exists with a different timestamp: \n'
+          f'resource: {resource}\nexisting timestamp: {read_timestamp}')
 
     data = self._encoder.encode_resource(res_id, resource)
     self._fs.write_file(self._get_path(res_id, timestamp_micros), data)
@@ -293,9 +286,7 @@ class ResourceStore:
       if page_size and len(page) == page_size:
         break
 
-    token = ''
-    if page:
-      token = self._encode_token(last_timestamp_micros, page[-1])
+    token = self._encode_token(last_timestamp_micros, page[-1]) if page else ''
     return page, token
 
   def read_by_proto_ids(

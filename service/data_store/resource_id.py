@@ -126,10 +126,10 @@ class ResourceSpec(dict):
     if not isinstance(spec_nest, dict):
       spec_nest = {key: None for key in spec_nest}
     super().__init__(spec_nest)
-    self.attribute_map = attribute_map or dict()
-    accessor_map = accessor_map or dict()
-    self.collection_id_to_accessor_name = dict()
-    self.accessor_name_to_collection_id = dict()
+    self.attribute_map = attribute_map or {}
+    accessor_map = accessor_map or {}
+    self.collection_id_to_accessor_name = {}
+    self.accessor_name_to_collection_id = {}
     seen = set()
     self._initialize(self, seen, accessor_map)
     for collection_id in accessor_map:
@@ -191,10 +191,10 @@ class ResourceId:
           '"id_string", "parts" or individual key-value assignments via '
           '"kw_args"')
 
-    self.id_string = None
     self.parts = None
     self.collection_map = None
 
+    self.id_string = None
     if id_or_parts:
       if isinstance(id_or_parts, str):
         self.id_string = id_or_parts
@@ -205,8 +205,9 @@ class ResourceId:
         try:
           self.parts = [str(s) for s in id_or_parts]
         except TypeError:
-          raise ValueError('Expected string or iterable for "id_or_parts", got '
-                           + type(id_or_parts))
+          raise ValueError(
+              f'Expected string or iterable for "id_or_parts", got {type(id_or_parts)}'
+          )
         self.id_string = '/'.join(self.parts)
       self.collection_map = self._compute_collection_map(
           self._resource_spec, self.parts)
@@ -215,7 +216,7 @@ class ResourceId:
       if not resource_spec:
         raise ValueError(
             'ResourceSpec must be provided when initializing from kwargs.')
-      self.collection_map = dict()
+      self.collection_map = {}
       for accessor_name, elem_id in kwargs.items():
         try:
           collection_id = (
@@ -223,7 +224,7 @@ class ResourceId:
           self.collection_map[collection_id] = str(elem_id)
         except KeyError:
           if accessor_name != ATTRIBUTE:
-            raise InvalidResourceError('Unknown collection: ' + accessor_name)
+            raise InvalidResourceError(f'Unknown collection: {accessor_name}')
           self.collection_map[ATTRIBUTE] = str(elem_id)
 
       self.parts = self._compute_parts(
@@ -288,10 +289,8 @@ class ResourceId:
     current_spec_node = resource_spec
     collection_map = {}
 
-    if len(parts) % 2 == 0:
-      attribute = None
-    else:
-      attribute = None
+    attribute = None
+    if len(parts) % 2 != 0:
       parts, attribute = parts[:-1], parts[-1]
 
     assert len(parts) % 2 == 0
@@ -353,8 +352,7 @@ class ResourceId:
           raise InvalidResourceError('Collection IDs in spec may not be empty.')
 
         if key in collection_ids_to_process:
-          parts.append(key)
-          parts.append(collection_map[key])
+          parts.extend((key, collection_map[key]))
           if not parts[-1]:
             raise InvalidResourceError(
                 f'Element ID for "{key}" is empty: {collection_map}')
@@ -371,16 +369,15 @@ class ResourceId:
 
     if collection_ids_to_process:
       raise InvalidResourceError(
-          'Could not match the following collection ids to spec: '
-          + str(collection_ids_to_process))
+          f'Could not match the following collection ids to spec: {collection_ids_to_process}'
+      )
     if not parts:
       raise InvalidResourceError(
-          'Resource does not specify an element within a collection: '
-          + str(collection_map))
+          f'Resource does not specify an element within a collection: {str(collection_map)}'
+      )
 
     last_collection_id = parts[-2]
-    attribute = collection_map.get(ATTRIBUTE, None)
-    if attribute:
+    if attribute := collection_map.get(ATTRIBUTE, None):
       if attribute not in resource_spec.attribute_map.get(
           last_collection_id, []):
         raise InvalidResourceError(
@@ -433,10 +430,7 @@ class FalkenResourceId(ResourceId):
 
   @property
   def attribute(self):
-    if len(self.parts) % 2 == 0:
-      return None
-    else:
-      return self.parts[-1]
+    return None if len(self.parts) % 2 == 0 else self.parts[-1]
 
   def __init__(self, *args, **kwargs):
     super().__init__(

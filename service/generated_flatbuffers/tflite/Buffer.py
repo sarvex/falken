@@ -56,9 +56,7 @@ class Buffer(object):
     # Buffer
     def DataLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Buffer
     def DataIsNone(self):
@@ -97,13 +95,12 @@ class BufferT(object):
     def _UnPack(self, buffer):
         if buffer is None:
             return
-        if not buffer.DataIsNone():
-            if np is None:
+        if np is None:
+            if not buffer.DataIsNone():
                 self.data = []
-                for i in range(buffer.DataLength()):
-                    self.data.append(buffer.Data(i))
-            else:
-                self.data = buffer.DataAsNumpy()
+                self.data.extend(buffer.Data(i) for i in range(buffer.DataLength()))
+        elif not buffer.DataIsNone():
+            self.data = buffer.DataAsNumpy()
 
     # BufferT
     def Pack(self, builder):
@@ -118,5 +115,4 @@ class BufferT(object):
         BufferStart(builder)
         if self.data is not None:
             BufferAddData(builder, data)
-        buffer = BufferEnd(builder)
-        return buffer
+        return BufferEnd(builder)

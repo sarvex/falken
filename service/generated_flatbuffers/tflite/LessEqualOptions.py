@@ -68,5 +68,4 @@ class LessEqualOptionsT(object):
     # LessEqualOptionsT
     def Pack(self, builder):
         LessEqualOptionsStart(builder)
-        lessEqualOptions = LessEqualOptionsEnd(builder)
-        return lessEqualOptions
+        return LessEqualOptionsEnd(builder)

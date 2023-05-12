@@ -150,15 +150,13 @@ class LearnerTest(parameterized.TestCase):
     self.summaries_path = os.path.join(output_path, 'summaries')
     self.tmp_models_path = os.path.join(output_path, 'tmp_models')
     self.models_path = os.path.join(output_path, 'models')
-    learner = learner_module.Learner(
-        self.tmp_models_path,
-        self.models_path,
-        self.checkpoints_path,
-        self.summaries_path,
-        self.storage,
-        always_block_when_fetching=True,
-        **kwargs)
-    return learner
+    return learner_module.Learner(self.tmp_models_path,
+                                  self.models_path,
+                                  self.checkpoints_path,
+                                  self.summaries_path,
+                                  self.storage,
+                                  always_block_when_fetching=True,
+                                  **kwargs)
 
   def test_process_assignment_until_stop(self):
     """Test processing an assignment until stop_process_assignment is called."""
@@ -699,9 +697,7 @@ class _ModelManagerMock(model_manager.ModelManager):
 
   def should_stop(self):
     falken_logging.info(f'Mock learner has {self._models_recorded} models.')
-    if self._models_recorded >= 2:
-      return 'Mock learner has >= 2 models.'
-    return None
+    return 'Mock learner has >= 2 models.' if self._models_recorded >= 2 else None
 
 
 if __name__ == '__main__':

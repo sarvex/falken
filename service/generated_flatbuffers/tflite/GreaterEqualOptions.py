@@ -68,5 +68,4 @@ class GreaterEqualOptionsT(object):
     # GreaterEqualOptionsT
     def Pack(self, builder):
         GreaterEqualOptionsStart(builder)
-        greaterEqualOptions = GreaterEqualOptionsEnd(builder)
-        return greaterEqualOptions
+        return GreaterEqualOptionsEnd(builder)

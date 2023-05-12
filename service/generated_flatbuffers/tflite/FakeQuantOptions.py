@@ -111,5 +111,4 @@ class FakeQuantOptionsT(object):
         FakeQuantOptionsAddMax(builder, self.max)
         FakeQuantOptionsAddNumBits(builder, self.numBits)
         FakeQuantOptionsAddNarrowRange(builder, self.narrowRange)
-        fakeQuantOptions = FakeQuantOptionsEnd(builder)
-        return fakeQuantOptions
+        return FakeQuantOptionsEnd(builder)

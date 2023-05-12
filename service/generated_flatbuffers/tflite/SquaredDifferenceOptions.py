@@ -68,5 +68,4 @@ class SquaredDifferenceOptionsT(object):
     # SquaredDifferenceOptionsT
     def Pack(self, builder):
         SquaredDifferenceOptionsStart(builder)
-        squaredDifferenceOptions = SquaredDifferenceOptionsEnd(builder)
-        return squaredDifferenceOptions
+        return SquaredDifferenceOptionsEnd(builder)

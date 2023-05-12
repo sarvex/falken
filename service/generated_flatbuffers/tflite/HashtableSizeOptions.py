@@ -68,5 +68,4 @@ class HashtableSizeOptionsT(object):
     # HashtableSizeOptionsT
     def Pack(self, builder):
         HashtableSizeOptionsStart(builder)
-        hashtableSizeOptions = HashtableSizeOptionsEnd(builder)
-        return hashtableSizeOptions
+        return HashtableSizeOptionsEnd(builder)

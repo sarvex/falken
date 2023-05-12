@@ -111,5 +111,4 @@ class BidirectionalSequenceRNNOptionsT(object):
         BidirectionalSequenceRNNOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         BidirectionalSequenceRNNOptionsAddMergeOutputs(builder, self.mergeOutputs)
         BidirectionalSequenceRNNOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        bidirectionalSequenceRNNOptions = BidirectionalSequenceRNNOptionsEnd(builder)
-        return bidirectionalSequenceRNNOptions
+        return BidirectionalSequenceRNNOptionsEnd(builder)

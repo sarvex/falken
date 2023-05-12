@@ -68,5 +68,4 @@ class BroadcastToOptionsT(object):
     # BroadcastToOptionsT
     def Pack(self, builder):
         BroadcastToOptionsStart(builder)
-        broadcastToOptions = BroadcastToOptionsEnd(builder)
-        return broadcastToOptions
+        return BroadcastToOptionsEnd(builder)

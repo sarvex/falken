@@ -68,5 +68,4 @@ class DequantizeOptionsT(object):
     # DequantizeOptionsT
     def Pack(self, builder):
         DequantizeOptionsStart(builder)
-        dequantizeOptions = DequantizeOptionsEnd(builder)
-        return dequantizeOptions
+        return DequantizeOptionsEnd(builder)

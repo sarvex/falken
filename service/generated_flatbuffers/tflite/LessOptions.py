@@ -68,5 +68,4 @@ class LessOptionsT(object):
     # LessOptionsT
     def Pack(self, builder):
         LessOptionsStart(builder)
-        lessOptions = LessOptionsEnd(builder)
-        return lessOptions
+        return LessOptionsEnd(builder)

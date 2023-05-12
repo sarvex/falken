@@ -68,5 +68,4 @@ class FloorModOptionsT(object):
     # FloorModOptionsT
     def Pack(self, builder):
         FloorModOptionsStart(builder)
-        floorModOptions = FloorModOptionsEnd(builder)
-        return floorModOptions
+        return FloorModOptionsEnd(builder)

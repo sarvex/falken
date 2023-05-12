@@ -63,14 +63,13 @@ def batch_size(tensor_nest):
   # Get the batch size of each tensor.
   batch_sizes_nest = tf.nest.map_structure(len, tensor_nest)
 
-  # Validate that all batch sizes are the same.
-  previous_size = None
   size = None
+  previous_size = None
   for size in tf.nest.flatten(batch_sizes_nest):
     if previous_size and size != previous_size:
       raise MismatchedBatchSizeError(
-          'Tensors found in nest with mismatched batch sizes: ' +
-          str(batch_sizes_nest))
+          f'Tensors found in nest with mismatched batch sizes: {str(batch_sizes_nest)}'
+      )
     previous_size = size
 
   return size

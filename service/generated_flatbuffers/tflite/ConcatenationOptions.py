@@ -89,5 +89,4 @@ class ConcatenationOptionsT(object):
         ConcatenationOptionsStart(builder)
         ConcatenationOptionsAddAxis(builder, self.axis)
         ConcatenationOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
-        concatenationOptions = ConcatenationOptionsEnd(builder)
-        return concatenationOptions
+        return ConcatenationOptionsEnd(builder)

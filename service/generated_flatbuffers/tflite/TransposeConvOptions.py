@@ -100,5 +100,4 @@ class TransposeConvOptionsT(object):
         TransposeConvOptionsAddPadding(builder, self.padding)
         TransposeConvOptionsAddStrideW(builder, self.strideW)
         TransposeConvOptionsAddStrideH(builder, self.strideH)
-        transposeConvOptions = TransposeConvOptionsEnd(builder)
-        return transposeConvOptions
+        return TransposeConvOptionsEnd(builder)

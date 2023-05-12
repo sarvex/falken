@@ -48,9 +48,7 @@ class OperatorCode(object):
     # OperatorCode
     def CustomCode(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
     # OperatorCode
     def Version(self):
@@ -114,5 +112,4 @@ class OperatorCodeT(object):
             OperatorCodeAddCustomCode(builder, customCode)
         OperatorCodeAddVersion(builder, self.version)
         OperatorCodeAddBuiltinCode(builder, self.builtinCode)
-        operatorCode = OperatorCodeEnd(builder)
-        return operatorCode
+        return OperatorCodeEnd(builder)

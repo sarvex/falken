@@ -68,5 +68,4 @@ class ExpandDimsOptionsT(object):
     # ExpandDimsOptionsT
     def Pack(self, builder):
         ExpandDimsOptionsStart(builder)
-        expandDimsOptions = ExpandDimsOptionsEnd(builder)
-        return expandDimsOptions
+        return ExpandDimsOptionsEnd(builder)

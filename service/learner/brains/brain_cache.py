@@ -67,8 +67,7 @@ class BrainCache:
     else:
       # If we've exceeded the cache size, delete the least recently used item.
       if len(self._brains) == self._size:
-        lru_brain = self._brains.popitem()
-        if lru_brain:
+        if lru_brain := self._brains.popitem():
           del lru_brain
 
       falken_logging.info(f'Creating brain, hparams: {hparams}\n'
@@ -85,5 +84,5 @@ class BrainCache:
     # Return a copy of the hyperparameters with the brain's hyperparameters
     # overlaid.
     result_hparams = dict(hparams)
-    result_hparams.update(brain.hparams)
+    result_hparams |= brain.hparams
     return (brain, result_hparams)

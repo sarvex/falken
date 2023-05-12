@@ -78,5 +78,4 @@ class CallOptionsT(object):
     def Pack(self, builder):
         CallOptionsStart(builder)
         CallOptionsAddSubgraph(builder, self.subgraph)
-        callOptions = CallOptionsEnd(builder)
-        return callOptions
+        return CallOptionsEnd(builder)

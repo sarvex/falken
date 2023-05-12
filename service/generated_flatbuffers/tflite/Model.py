@@ -61,9 +61,7 @@ class Model(object):
     # Model
     def OperatorCodesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def OperatorCodesIsNone(self):
@@ -86,9 +84,7 @@ class Model(object):
     # Model
     def SubgraphsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def SubgraphsIsNone(self):
@@ -98,9 +94,7 @@ class Model(object):
     # Model
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
     # Model
     def Buffers(self, j):
@@ -118,9 +112,7 @@ class Model(object):
     # Model
     def BuffersLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def BuffersIsNone(self):
@@ -145,9 +137,7 @@ class Model(object):
     # Model
     def MetadataBufferLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def MetadataBufferIsNone(self):
@@ -170,9 +160,7 @@ class Model(object):
     # Model
     def MetadataLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def MetadataIsNone(self):
@@ -195,9 +183,7 @@ class Model(object):
     # Model
     def SignatureDefsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Model
     def SignatureDefsIsNone(self):
@@ -286,13 +272,15 @@ class ModelT(object):
                 else:
                     buffer_ = tflite.Buffer.BufferT.InitFromObj(model.Buffers(i))
                     self.buffers.append(buffer_)
-        if not model.MetadataBufferIsNone():
-            if np is None:
+        if np is None:
+            if not model.MetadataBufferIsNone():
                 self.metadataBuffer = []
-                for i in range(model.MetadataBufferLength()):
-                    self.metadataBuffer.append(model.MetadataBuffer(i))
-            else:
-                self.metadataBuffer = model.MetadataBufferAsNumpy()
+                self.metadataBuffer.extend(
+                    model.MetadataBuffer(i)
+                    for i in range(model.MetadataBufferLength())
+                )
+        elif not model.MetadataBufferIsNone():
+            self.metadataBuffer = model.MetadataBufferAsNumpy()
         if not model.MetadataIsNone():
             self.metadata = []
             for i in range(model.MetadataLength()):
@@ -313,17 +301,18 @@ class ModelT(object):
     # ModelT
     def Pack(self, builder):
         if self.operatorCodes is not None:
-            operatorCodeslist = []
-            for i in range(len(self.operatorCodes)):
-                operatorCodeslist.append(self.operatorCodes[i].Pack(builder))
+            operatorCodeslist = [
+                self.operatorCodes[i].Pack(builder)
+                for i in range(len(self.operatorCodes))
+            ]
             ModelStartOperatorCodesVector(builder, len(self.operatorCodes))
             for i in reversed(range(len(self.operatorCodes))):
                 builder.PrependUOffsetTRelative(operatorCodeslist[i])
             operatorCodes = builder.EndVector(len(self.operatorCodes))
         if self.subgraphs is not None:
-            subgraphslist = []
-            for i in range(len(self.subgraphs)):
-                subgraphslist.append(self.subgraphs[i].Pack(builder))
+            subgraphslist = [
+                self.subgraphs[i].Pack(builder) for i in range(len(self.subgraphs))
+            ]
             ModelStartSubgraphsVector(builder, len(self.subgraphs))
             for i in reversed(range(len(self.subgraphs))):
                 builder.PrependUOffsetTRelative(subgraphslist[i])
@@ -331,9 +320,7 @@ class ModelT(object):
         if self.description is not None:
             description = builder.CreateString(self.description)
         if self.buffers is not None:
-            bufferslist = []
-            for i in range(len(self.buffers)):
-                bufferslist.append(self.buffers[i].Pack(builder))
+            bufferslist = [self.buffers[i].Pack(builder) for i in range(len(self.buffers))]
             ModelStartBuffersVector(builder, len(self.buffers))
             for i in reversed(range(len(self.buffers))):
                 builder.PrependUOffsetTRelative(bufferslist[i])
@@ -347,17 +334,18 @@ class ModelT(object):
                     builder.PrependInt32(self.metadataBuffer[i])
                 metadataBuffer = builder.EndVector(len(self.metadataBuffer))
         if self.metadata is not None:
-            metadatalist = []
-            for i in range(len(self.metadata)):
-                metadatalist.append(self.metadata[i].Pack(builder))
+            metadatalist = [
+                self.metadata[i].Pack(builder) for i in range(len(self.metadata))
+            ]
             ModelStartMetadataVector(builder, len(self.metadata))
             for i in reversed(range(len(self.metadata))):
                 builder.PrependUOffsetTRelative(metadatalist[i])
             metadata = builder.EndVector(len(self.metadata))
         if self.signatureDefs is not None:
-            signatureDefslist = []
-            for i in range(len(self.signatureDefs)):
-                signatureDefslist.append(self.signatureDefs[i].Pack(builder))
+            signatureDefslist = [
+                self.signatureDefs[i].Pack(builder)
+                for i in range(len(self.signatureDefs))
+            ]
             ModelStartSignatureDefsVector(builder, len(self.signatureDefs))
             for i in reversed(range(len(self.signatureDefs))):
                 builder.PrependUOffsetTRelative(signatureDefslist[i])
@@ -378,5 +366,4 @@ class ModelT(object):
             ModelAddMetadata(builder, metadata)
         if self.signatureDefs is not None:
             ModelAddSignatureDefs(builder, signatureDefs)
-        model = ModelEnd(builder)
-        return model
+        return ModelEnd(builder)

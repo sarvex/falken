@@ -89,5 +89,4 @@ class AddOptionsT(object):
         AddOptionsStart(builder)
         AddOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         AddOptionsAddPotScaleInt16(builder, self.potScaleInt16)
-        addOptions = AddOptionsEnd(builder)
-        return addOptions
+        return AddOptionsEnd(builder)

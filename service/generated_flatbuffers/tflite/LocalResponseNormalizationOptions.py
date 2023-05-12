@@ -111,5 +111,4 @@ class LocalResponseNormalizationOptionsT(object):
         LocalResponseNormalizationOptionsAddBias(builder, self.bias)
         LocalResponseNormalizationOptionsAddAlpha(builder, self.alpha)
         LocalResponseNormalizationOptionsAddBeta(builder, self.beta)
-        localResponseNormalizationOptions = LocalResponseNormalizationOptionsEnd(builder)
-        return localResponseNormalizationOptions
+        return LocalResponseNormalizationOptionsEnd(builder)

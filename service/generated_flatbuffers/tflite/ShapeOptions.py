@@ -78,5 +78,4 @@ class ShapeOptionsT(object):
     def Pack(self, builder):
         ShapeOptionsStart(builder)
         ShapeOptionsAddOutType(builder, self.outType)
-        shapeOptions = ShapeOptionsEnd(builder)
-        return shapeOptions
+        return ShapeOptionsEnd(builder)

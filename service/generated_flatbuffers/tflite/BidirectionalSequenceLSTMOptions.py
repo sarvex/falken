@@ -133,5 +133,4 @@ class BidirectionalSequenceLSTMOptionsT(object):
         BidirectionalSequenceLSTMOptionsAddMergeOutputs(builder, self.mergeOutputs)
         BidirectionalSequenceLSTMOptionsAddTimeMajor(builder, self.timeMajor)
         BidirectionalSequenceLSTMOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        bidirectionalSequenceLSTMOptions = BidirectionalSequenceLSTMOptionsEnd(builder)
-        return bidirectionalSequenceLSTMOptions
+        return BidirectionalSequenceLSTMOptionsEnd(builder)

@@ -111,5 +111,4 @@ class FullyConnectedOptionsT(object):
         FullyConnectedOptionsAddWeightsFormat(builder, self.weightsFormat)
         FullyConnectedOptionsAddKeepNumDims(builder, self.keepNumDims)
         FullyConnectedOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        fullyConnectedOptions = FullyConnectedOptionsEnd(builder)
-        return fullyConnectedOptions
+        return FullyConnectedOptionsEnd(builder)

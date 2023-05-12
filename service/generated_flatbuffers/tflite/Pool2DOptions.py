@@ -133,5 +133,4 @@ class Pool2DOptionsT(object):
         Pool2DOptionsAddFilterWidth(builder, self.filterWidth)
         Pool2DOptionsAddFilterHeight(builder, self.filterHeight)
         Pool2DOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
-        pool2DOptions = Pool2DOptionsEnd(builder)
-        return pool2DOptions
+        return Pool2DOptionsEnd(builder)

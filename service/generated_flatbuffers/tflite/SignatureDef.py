@@ -54,9 +54,7 @@ class SignatureDef(object):
     # SignatureDef
     def InputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SignatureDef
     def InputsIsNone(self):
@@ -79,9 +77,7 @@ class SignatureDef(object):
     # SignatureDef
     def OutputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SignatureDef
     def OutputsIsNone(self):
@@ -91,16 +87,12 @@ class SignatureDef(object):
     # SignatureDef
     def MethodName(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
     # SignatureDef
     def Key(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
 def SignatureDefStart(builder): builder.StartObject(4)
 def SignatureDefAddInputs(builder, inputs): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(inputs), 0)
@@ -164,17 +156,13 @@ class SignatureDefT(object):
     # SignatureDefT
     def Pack(self, builder):
         if self.inputs is not None:
-            inputslist = []
-            for i in range(len(self.inputs)):
-                inputslist.append(self.inputs[i].Pack(builder))
+            inputslist = [self.inputs[i].Pack(builder) for i in range(len(self.inputs))]
             SignatureDefStartInputsVector(builder, len(self.inputs))
             for i in reversed(range(len(self.inputs))):
                 builder.PrependUOffsetTRelative(inputslist[i])
             inputs = builder.EndVector(len(self.inputs))
         if self.outputs is not None:
-            outputslist = []
-            for i in range(len(self.outputs)):
-                outputslist.append(self.outputs[i].Pack(builder))
+            outputslist = [self.outputs[i].Pack(builder) for i in range(len(self.outputs))]
             SignatureDefStartOutputsVector(builder, len(self.outputs))
             for i in reversed(range(len(self.outputs))):
                 builder.PrependUOffsetTRelative(outputslist[i])
@@ -192,5 +180,4 @@ class SignatureDefT(object):
             SignatureDefAddMethodName(builder, methodName)
         if self.key is not None:
             SignatureDefAddKey(builder, key)
-        signatureDef = SignatureDefEnd(builder)
-        return signatureDef
+        return SignatureDefEnd(builder)

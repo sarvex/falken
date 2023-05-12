@@ -78,5 +78,4 @@ class MulOptionsT(object):
     def Pack(self, builder):
         MulOptionsStart(builder)
         MulOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
-        mulOptions = MulOptionsEnd(builder)
-        return mulOptions
+        return MulOptionsEnd(builder)

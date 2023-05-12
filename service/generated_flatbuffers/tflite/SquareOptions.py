@@ -68,5 +68,4 @@ class SquareOptionsT(object):
     # SquareOptionsT
     def Pack(self, builder):
         SquareOptionsStart(builder)
-        squareOptions = SquareOptionsEnd(builder)
-        return squareOptions
+        return SquareOptionsEnd(builder)

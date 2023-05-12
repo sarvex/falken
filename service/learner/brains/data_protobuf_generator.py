@@ -200,18 +200,17 @@ class DataProtobufGenerator:
       unused_node: Unused.
     """
     child_data_proto_type = type(child_data_proto)
-    field_name = (
+    if field_name := (
         DataProtobufGenerator._ENTITY_DATA_PROTO_CLASS_TO_FIELD_NAME.get(
-            child_data_proto_type))
-    if field_name:
+            child_data_proto_type)):
       getattr(data_proto, field_name).CopyFrom(child_data_proto)
     else:
       entity_field = data_proto.entity_fields.add()
       field_name = (
           DataProtobufGenerator._LEAF_DATA_PROTO_CLASS_TO_FIELD_NAME.get(
               child_data_proto_type))
-      assert field_name, ('Unsupported entity field type ' +
-                          str(child_data_proto_type))
+      assert (field_name
+              ), f'Unsupported entity field type {str(child_data_proto_type)}'
       getattr(entity_field, field_name).CopyFrom(child_data_proto)
 
   @staticmethod

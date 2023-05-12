@@ -68,5 +68,4 @@ class Rfft2dOptionsT(object):
     # Rfft2dOptionsT
     def Pack(self, builder):
         Rfft2dOptionsStart(builder)
-        rfft2dOptions = Rfft2dOptionsEnd(builder)
-        return rfft2dOptions
+        return Rfft2dOptionsEnd(builder)

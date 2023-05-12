@@ -56,9 +56,7 @@ class Int32Vector(object):
     # Int32Vector
     def ValuesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Int32Vector
     def ValuesIsNone(self):
@@ -97,13 +95,15 @@ class Int32VectorT(object):
     def _UnPack(self, int32Vector):
         if int32Vector is None:
             return
-        if not int32Vector.ValuesIsNone():
-            if np is None:
+        if np is None:
+            if not int32Vector.ValuesIsNone():
                 self.values = []
-                for i in range(int32Vector.ValuesLength()):
-                    self.values.append(int32Vector.Values(i))
-            else:
-                self.values = int32Vector.ValuesAsNumpy()
+                self.values.extend(
+                    int32Vector.Values(i)
+                    for i in range(int32Vector.ValuesLength())
+                )
+        elif not int32Vector.ValuesIsNone():
+            self.values = int32Vector.ValuesAsNumpy()
 
     # Int32VectorT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class Int32VectorT(object):
         Int32VectorStart(builder)
         if self.values is not None:
             Int32VectorAddValues(builder, values)
-        int32Vector = Int32VectorEnd(builder)
-        return int32Vector
+        return Int32VectorEnd(builder)

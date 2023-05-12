@@ -17,6 +17,7 @@
 # Lint as: python3
 """Build a CMake project."""
 
+
 import argparse
 import logging
 import multiprocessing
@@ -45,11 +46,10 @@ CMAKE_DOWNLOAD_URL_BASE = (
 # Default CMake installer URL for the host operating system.
 CMAKE_INSTALLER_URL_BY_HOST_PLATFORM = {
     'darwin':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-Darwin-x86_64.dmg'),
+    f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-Darwin-x86_64.dmg',
     'linux':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-Linux-x86_64.sh'),
-    'win32':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-win64-x64.zip'),
+    f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-Linux-x86_64.sh',
+    'win32': f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-win64-x64.zip',
 }
 
 # Default configuration targets.
@@ -208,9 +208,7 @@ def run_and_check_result(command_line: str) -> bool:
     result = shell.run_command(command_line)
   except subprocess.CalledProcessError:
     return False
-  if result.returncode == 0:
-    return True
-  return False
+  return result.returncode == 0
 
 
 def ensure_xcode_available() -> bool:
@@ -248,7 +246,7 @@ def install_pip_packages(python_executable: str,
         logging.info('Package %s not installed.', package)
         command = ' '.join(
             [python_executable, '-m', 'pip', 'install', '--user'])
-        command += ' ' + package
+        command += f' {package}'
         logging.info('Install pip package: %s', package)
         if not run_and_check_result(command):
           return False
@@ -266,7 +264,7 @@ def is_package_installed(package_name: str) -> bool:
   Returns:
     True if packages is installed, False otherwise.
   """
-  return run_and_check_result('dpkg-query -l ' + package_name)
+  return run_and_check_result(f'dpkg-query -l {package_name}')
 
 
 def check_requirements_linux(args: argparse.Namespace) -> bool:
@@ -566,9 +564,7 @@ def main():
     logging.info(kv)
 
   if check_requirements(sys.platform, args):
-    if build_project(args):
-      return EXIT_SUCCESS
-    return EXIT_FAILURE
+    return EXIT_SUCCESS if build_project(args) else EXIT_FAILURE
   return EXIT_FAILURE
 
 

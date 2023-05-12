@@ -89,5 +89,4 @@ class IfOptionsT(object):
         IfOptionsStart(builder)
         IfOptionsAddThenSubgraphIndex(builder, self.thenSubgraphIndex)
         IfOptionsAddElseSubgraphIndex(builder, self.elseSubgraphIndex)
-        ifOptions = IfOptionsEnd(builder)
-        return ifOptions
+        return IfOptionsEnd(builder)

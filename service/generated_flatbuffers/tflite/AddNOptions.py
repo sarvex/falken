@@ -68,5 +68,4 @@ class AddNOptionsT(object):
     # AddNOptionsT
     def Pack(self, builder):
         AddNOptionsStart(builder)
-        addNOptions = AddNOptionsEnd(builder)
-        return addNOptions
+        return AddNOptionsEnd(builder)

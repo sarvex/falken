@@ -56,9 +56,7 @@ class ReshapeOptions(object):
     # ReshapeOptions
     def NewShapeLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # ReshapeOptions
     def NewShapeIsNone(self):
@@ -97,13 +95,15 @@ class ReshapeOptionsT(object):
     def _UnPack(self, reshapeOptions):
         if reshapeOptions is None:
             return
-        if not reshapeOptions.NewShapeIsNone():
-            if np is None:
+        if np is None:
+            if not reshapeOptions.NewShapeIsNone():
                 self.newShape = []
-                for i in range(reshapeOptions.NewShapeLength()):
-                    self.newShape.append(reshapeOptions.NewShape(i))
-            else:
-                self.newShape = reshapeOptions.NewShapeAsNumpy()
+                self.newShape.extend(
+                    reshapeOptions.NewShape(i)
+                    for i in range(reshapeOptions.NewShapeLength())
+                )
+        elif not reshapeOptions.NewShapeIsNone():
+            self.newShape = reshapeOptions.NewShapeAsNumpy()
 
     # ReshapeOptionsT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class ReshapeOptionsT(object):
         ReshapeOptionsStart(builder)
         if self.newShape is not None:
             ReshapeOptionsAddNewShape(builder, newShape)
-        reshapeOptions = ReshapeOptionsEnd(builder)
-        return reshapeOptions
+        return ReshapeOptionsEnd(builder)

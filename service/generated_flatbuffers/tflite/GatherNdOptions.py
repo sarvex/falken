@@ -68,5 +68,4 @@ class GatherNdOptionsT(object):
     # GatherNdOptionsT
     def Pack(self, builder):
         GatherNdOptionsStart(builder)
-        gatherNdOptions = GatherNdOptionsEnd(builder)
-        return gatherNdOptions
+        return GatherNdOptionsEnd(builder)

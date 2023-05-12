@@ -133,5 +133,4 @@ class Conv2DOptionsT(object):
         Conv2DOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         Conv2DOptionsAddDilationWFactor(builder, self.dilationWFactor)
         Conv2DOptionsAddDilationHFactor(builder, self.dilationHFactor)
-        conv2DOptions = Conv2DOptionsEnd(builder)
-        return conv2DOptions
+        return Conv2DOptionsEnd(builder)

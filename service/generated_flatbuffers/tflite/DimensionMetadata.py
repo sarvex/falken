@@ -153,5 +153,4 @@ class DimensionMetadataT(object):
         DimensionMetadataAddArrayIndicesType(builder, self.arrayIndicesType)
         if self.arrayIndices is not None:
             DimensionMetadataAddArrayIndices(builder, arrayIndices)
-        dimensionMetadata = DimensionMetadataEnd(builder)
-        return dimensionMetadata
+        return DimensionMetadataEnd(builder)

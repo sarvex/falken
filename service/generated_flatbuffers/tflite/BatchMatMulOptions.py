@@ -100,5 +100,4 @@ class BatchMatMulOptionsT(object):
         BatchMatMulOptionsAddAdjX(builder, self.adjX)
         BatchMatMulOptionsAddAdjY(builder, self.adjY)
         BatchMatMulOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        batchMatMulOptions = BatchMatMulOptionsEnd(builder)
-        return batchMatMulOptions
+        return BatchMatMulOptionsEnd(builder)

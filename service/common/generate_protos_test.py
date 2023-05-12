@@ -95,13 +95,13 @@ class GenerateProtosTest(absltest.TestCase):
       return os.path.join(generated_dir,
                           os.path.basename(source_proto_path).split('.')[0])
 
-    all_expected_protos = ([
-        extract_generated_proto_path(proto_name, generated_dir) + '_pb2.py'
+    all_expected_protos = [
+        f'{extract_generated_proto_path(proto_name, generated_dir)}_pb2.py'
         for proto_name in source_protos
     ] + [
-        extract_generated_proto_path(proto_name, generated_dir) + '_pb2_grpc.py'
+        f'{extract_generated_proto_path(proto_name, generated_dir)}_pb2_grpc.py'
         for proto_name in source_protos
-    ])
+    ]
 
     generated_protos = glob.glob(f'{generated_dir}/*.py')
     self.assertSameElements(generated_protos, all_expected_protos)

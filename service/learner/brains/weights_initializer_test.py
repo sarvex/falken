@@ -172,7 +172,7 @@ class WeightsInitializerTest(parameterized.TestCase):
   def test_initialize_unknown_layer_or_model(self):
     """Try initializing weights in an unsupported class."""
     with self.assertRaises(AssertionError):
-      weights_initializer.WeightsInitializer.initialize_layer_or_model(list())
+      weights_initializer.WeightsInitializer.initialize_layer_or_model([])
 
   def test_initialize_bias_weights(self):
     """Initialize a layer with bias weights."""

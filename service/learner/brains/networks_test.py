@@ -58,9 +58,7 @@ class NetworksTest(parameterized.TestCase):
 
     def _safe_concat(l, t):
       """Concat that works for empty lists."""
-      if not l:
-        return t
-      return tf.concat([l, t], axis=0)
+      return t if not l else tf.concat([l, t], axis=0)
 
     def _clone_to_batch(tensor, batch_dims):
       t = tf.stack([tensor] * _size(batch_dims))
@@ -77,6 +75,7 @@ class NetworksTest(parameterized.TestCase):
       batch_shape = d1.shape
       spec_shape = _safe_concat(batch_dims, s.shape)
       self.assertEqual(batch_shape, spec_shape)
+
     tf.nest.map_structure(
         _has_shape, sampled, brain_spec.action_spec.tfa_spec)
 

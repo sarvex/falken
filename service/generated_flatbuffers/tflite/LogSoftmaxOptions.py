@@ -68,5 +68,4 @@ class LogSoftmaxOptionsT(object):
     # LogSoftmaxOptionsT
     def Pack(self, builder):
         LogSoftmaxOptionsStart(builder)
-        logSoftmaxOptions = LogSoftmaxOptionsEnd(builder)
-        return logSoftmaxOptions
+        return LogSoftmaxOptionsEnd(builder)

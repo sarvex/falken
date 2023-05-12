@@ -122,5 +122,4 @@ class StridedSliceOptionsT(object):
         StridedSliceOptionsAddEllipsisMask(builder, self.ellipsisMask)
         StridedSliceOptionsAddNewAxisMask(builder, self.newAxisMask)
         StridedSliceOptionsAddShrinkAxisMask(builder, self.shrinkAxisMask)
-        stridedSliceOptions = StridedSliceOptionsEnd(builder)
-        return stridedSliceOptions
+        return StridedSliceOptionsEnd(builder)

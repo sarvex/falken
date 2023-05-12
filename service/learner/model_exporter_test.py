@@ -225,9 +225,10 @@ class ModelExporterTest(parameterized.TestCase):
         model_id='*', offline_evaluation_id='*')
     offline_evals = [
         self._data_store.read(r) for r in offline_eval_res_ids]
-    evals_results = {}
-    for offline_eval in offline_evals:
-      evals_results[offline_eval.model_id] = offline_eval.offline_evaluation_id
+    evals_results = {
+        offline_eval.model_id: offline_eval.offline_evaluation_id
+        for offline_eval in offline_evals
+    }
     self.assertEqual(evals_results, {'model_id_0': 3, 'model_id_1': 5})
 
   @parameterized.parameters(True, False)

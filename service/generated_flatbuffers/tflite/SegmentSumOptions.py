@@ -68,5 +68,4 @@ class SegmentSumOptionsT(object):
     # SegmentSumOptionsT
     def Pack(self, builder):
         SegmentSumOptionsStart(builder)
-        segmentSumOptions = SegmentSumOptionsEnd(builder)
-        return segmentSumOptions
+        return SegmentSumOptionsEnd(builder)

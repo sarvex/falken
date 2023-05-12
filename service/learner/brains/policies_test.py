@@ -60,12 +60,10 @@ class PoliciesTest(absltest.TestCase):
         0.0,   # reward
         0.99)  # discount
 
-    actions = []
-    for _ in range(100):
-      # Actions come back as a list containing an int tensor and a float tensor.
-      # We cast both to float for easier data munging.
-      actions.append(np.array(
-          greedy_float.action(timestep, ()).action, dtype=np.float32))
+    actions = [
+        np.array(greedy_float.action(timestep, ()).action, dtype=np.float32)
+        for _ in range(100)
+    ]
     actions = np.array(actions, dtype=np.float32)
 
     # actions is 100 x 2, where actions[:, 0] are outputs from the int action

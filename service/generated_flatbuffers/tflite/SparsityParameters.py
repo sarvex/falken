@@ -56,9 +56,7 @@ class SparsityParameters(object):
     # SparsityParameters
     def TraversalOrderLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SparsityParameters
     def TraversalOrderIsNone(self):
@@ -83,9 +81,7 @@ class SparsityParameters(object):
     # SparsityParameters
     def BlockMapLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SparsityParameters
     def BlockMapIsNone(self):
@@ -108,9 +104,7 @@ class SparsityParameters(object):
     # SparsityParameters
     def DimMetadataLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SparsityParameters
     def DimMetadataIsNone(self):
@@ -156,18 +150,22 @@ class SparsityParametersT(object):
     def _UnPack(self, sparsityParameters):
         if sparsityParameters is None:
             return
-        if not sparsityParameters.TraversalOrderIsNone():
-            if np is None:
+        if np is None:
+            if not sparsityParameters.TraversalOrderIsNone():
                 self.traversalOrder = []
-                for i in range(sparsityParameters.TraversalOrderLength()):
-                    self.traversalOrder.append(sparsityParameters.TraversalOrder(i))
-            else:
-                self.traversalOrder = sparsityParameters.TraversalOrderAsNumpy()
+                self.traversalOrder.extend(
+                    sparsityParameters.TraversalOrder(i)
+                    for i in range(sparsityParameters.TraversalOrderLength())
+                )
+        elif not sparsityParameters.TraversalOrderIsNone():
+            self.traversalOrder = sparsityParameters.TraversalOrderAsNumpy()
         if not sparsityParameters.BlockMapIsNone():
             if np is None:
                 self.blockMap = []
-                for i in range(sparsityParameters.BlockMapLength()):
-                    self.blockMap.append(sparsityParameters.BlockMap(i))
+                self.blockMap.extend(
+                    sparsityParameters.BlockMap(i)
+                    for i in range(sparsityParameters.BlockMapLength())
+                )
             else:
                 self.blockMap = sparsityParameters.BlockMapAsNumpy()
         if not sparsityParameters.DimMetadataIsNone():
@@ -198,9 +196,10 @@ class SparsityParametersT(object):
                     builder.PrependInt32(self.blockMap[i])
                 blockMap = builder.EndVector(len(self.blockMap))
         if self.dimMetadata is not None:
-            dimMetadatalist = []
-            for i in range(len(self.dimMetadata)):
-                dimMetadatalist.append(self.dimMetadata[i].Pack(builder))
+            dimMetadatalist = [
+                self.dimMetadata[i].Pack(builder)
+                for i in range(len(self.dimMetadata))
+            ]
             SparsityParametersStartDimMetadataVector(builder, len(self.dimMetadata))
             for i in reversed(range(len(self.dimMetadata))):
                 builder.PrependUOffsetTRelative(dimMetadatalist[i])
@@ -212,5 +211,4 @@ class SparsityParametersT(object):
             SparsityParametersAddBlockMap(builder, blockMap)
         if self.dimMetadata is not None:
             SparsityParametersAddDimMetadata(builder, dimMetadata)
-        sparsityParameters = SparsityParametersEnd(builder)
-        return sparsityParameters
+        return SparsityParametersEnd(builder)

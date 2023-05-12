@@ -33,7 +33,7 @@ class ActionPostprocessorTest(absltest.TestCase):
   def test_action_postprocessor(self):
     """Test basic operation of the action postprocessor."""
     brain_spec = tfa_specs.BrainSpec(test_data.brain_spec())
-    hparams = dict()
+    hparams = {}
 
     processor = action_postprocessor.ActionPostprocessor(brain_spec, hparams)
     observations = tf.nest.map_structure(

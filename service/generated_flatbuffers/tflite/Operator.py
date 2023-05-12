@@ -63,9 +63,7 @@ class Operator(object):
     # Operator
     def InputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Operator
     def InputsIsNone(self):
@@ -90,9 +88,7 @@ class Operator(object):
     # Operator
     def OutputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Operator
     def OutputsIsNone(self):
@@ -134,9 +130,7 @@ class Operator(object):
     # Operator
     def CustomOptionsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Operator
     def CustomOptionsIsNone(self):
@@ -168,9 +162,7 @@ class Operator(object):
     # Operator
     def MutatingVariableInputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Operator
     def MutatingVariableInputsIsNone(self):
@@ -195,9 +187,7 @@ class Operator(object):
     # Operator
     def IntermediatesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Operator
     def IntermediatesIsNone(self):
@@ -368,18 +358,18 @@ class OperatorT(object):
         if operator is None:
             return
         self.opcodeIndex = operator.OpcodeIndex()
-        if not operator.InputsIsNone():
-            if np is None:
+        if np is None:
+            if not operator.InputsIsNone():
                 self.inputs = []
-                for i in range(operator.InputsLength()):
-                    self.inputs.append(operator.Inputs(i))
-            else:
-                self.inputs = operator.InputsAsNumpy()
+                self.inputs.extend(operator.Inputs(i) for i in range(operator.InputsLength()))
+        elif not operator.InputsIsNone():
+            self.inputs = operator.InputsAsNumpy()
         if not operator.OutputsIsNone():
             if np is None:
                 self.outputs = []
-                for i in range(operator.OutputsLength()):
-                    self.outputs.append(operator.Outputs(i))
+                self.outputs.extend(
+                    operator.Outputs(i) for i in range(operator.OutputsLength())
+                )
             else:
                 self.outputs = operator.OutputsAsNumpy()
         self.builtinOptionsType = operator.BuiltinOptionsType()
@@ -387,23 +377,29 @@ class OperatorT(object):
         if not operator.CustomOptionsIsNone():
             if np is None:
                 self.customOptions = []
-                for i in range(operator.CustomOptionsLength()):
-                    self.customOptions.append(operator.CustomOptions(i))
+                self.customOptions.extend(
+                    operator.CustomOptions(i)
+                    for i in range(operator.CustomOptionsLength())
+                )
             else:
                 self.customOptions = operator.CustomOptionsAsNumpy()
         self.customOptionsFormat = operator.CustomOptionsFormat()
         if not operator.MutatingVariableInputsIsNone():
             if np is None:
                 self.mutatingVariableInputs = []
-                for i in range(operator.MutatingVariableInputsLength()):
-                    self.mutatingVariableInputs.append(operator.MutatingVariableInputs(i))
+                self.mutatingVariableInputs.extend(
+                    operator.MutatingVariableInputs(i)
+                    for i in range(operator.MutatingVariableInputsLength())
+                )
             else:
                 self.mutatingVariableInputs = operator.MutatingVariableInputsAsNumpy()
         if not operator.IntermediatesIsNone():
             if np is None:
                 self.intermediates = []
-                for i in range(operator.IntermediatesLength()):
-                    self.intermediates.append(operator.Intermediates(i))
+                self.intermediates.extend(
+                    operator.Intermediates(i)
+                    for i in range(operator.IntermediatesLength())
+                )
             else:
                 self.intermediates = operator.IntermediatesAsNumpy()
 
@@ -467,5 +463,4 @@ class OperatorT(object):
             OperatorAddMutatingVariableInputs(builder, mutatingVariableInputs)
         if self.intermediates is not None:
             OperatorAddIntermediates(builder, intermediates)
-        operator = OperatorEnd(builder)
-        return operator
+        return OperatorEnd(builder)

@@ -78,5 +78,4 @@ class MirrorPadOptionsT(object):
     def Pack(self, builder):
         MirrorPadOptionsStart(builder)
         MirrorPadOptionsAddMode(builder, self.mode)
-        mirrorPadOptions = MirrorPadOptionsEnd(builder)
-        return mirrorPadOptions
+        return MirrorPadOptionsEnd(builder)

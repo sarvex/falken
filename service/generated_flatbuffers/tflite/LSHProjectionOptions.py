@@ -78,5 +78,4 @@ class LSHProjectionOptionsT(object):
     def Pack(self, builder):
         LSHProjectionOptionsStart(builder)
         LSHProjectionOptionsAddType(builder, self.type)
-        lSHProjectionOptions = LSHProjectionOptionsEnd(builder)
-        return lSHProjectionOptions
+        return LSHProjectionOptionsEnd(builder)

@@ -68,5 +68,4 @@ class EqualOptionsT(object):
     # EqualOptionsT
     def Pack(self, builder):
         EqualOptionsStart(builder)
-        equalOptions = EqualOptionsEnd(builder)
-        return equalOptions
+        return EqualOptionsEnd(builder)

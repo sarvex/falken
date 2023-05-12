@@ -68,5 +68,4 @@ class NotEqualOptionsT(object):
     # NotEqualOptionsT
     def Pack(self, builder):
         NotEqualOptionsStart(builder)
-        notEqualOptions = NotEqualOptionsEnd(builder)
-        return notEqualOptions
+        return NotEqualOptionsEnd(builder)

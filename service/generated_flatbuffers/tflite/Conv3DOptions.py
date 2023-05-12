@@ -155,5 +155,4 @@ class Conv3DOptionsT(object):
         Conv3DOptionsAddDilationDFactor(builder, self.dilationDFactor)
         Conv3DOptionsAddDilationWFactor(builder, self.dilationWFactor)
         Conv3DOptionsAddDilationHFactor(builder, self.dilationHFactor)
-        conv3DOptions = Conv3DOptionsEnd(builder)
-        return conv3DOptions
+        return Conv3DOptionsEnd(builder)

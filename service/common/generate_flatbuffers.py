@@ -147,13 +147,16 @@ def generate():
       os.makedirs(generated_fbs_dir)
     downloaded_fbs_dir = download_external_fbs(temp_dir)
     args = [
-        flatc, '--python',
-        '-o', generated_fbs_dir,
-        '-I', downloaded_fbs_dir,
+        flatc,
+        '--python',
+        '-o',
+        generated_fbs_dir,
+        '-I',
+        downloaded_fbs_dir,
         '--gen-object-api',
+        *glob.glob(f'{downloaded_fbs_dir}/**/*.fbs', recursive=True),
     ]
 
-    args.extend(glob.glob(f'{downloaded_fbs_dir}/**/*.fbs', recursive=True))
     subprocess.run(args, check=True)
 
     shutil.rmtree(temp_dir)

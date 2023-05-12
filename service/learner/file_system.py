@@ -155,7 +155,7 @@ class FileSystem:
     """Compresses all files in full_tmp_path, saving to permanent storage."""
     rel_path = FileSystem._get_relative_path(
         self._tmp_models_directory, full_tmp_path)
-    model_path = os.path.join(self._models_directory, rel_path) + '.zip'
+    model_path = f'{os.path.join(self._models_directory, rel_path)}.zip'
     self._fs.make_dirs(os.path.split(model_path)[0])
 
     # Compress in a temporary directory and then move to destination.

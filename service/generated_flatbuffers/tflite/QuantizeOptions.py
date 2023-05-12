@@ -68,5 +68,4 @@ class QuantizeOptionsT(object):
     # QuantizeOptionsT
     def Pack(self, builder):
         QuantizeOptionsStart(builder)
-        quantizeOptions = QuantizeOptionsEnd(builder)
-        return quantizeOptions
+        return QuantizeOptionsEnd(builder)

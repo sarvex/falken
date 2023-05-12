@@ -68,5 +68,4 @@ class FillOptionsT(object):
     # FillOptionsT
     def Pack(self, builder):
         FillOptionsStart(builder)
-        fillOptions = FillOptionsEnd(builder)
-        return fillOptions
+        return FillOptionsEnd(builder)

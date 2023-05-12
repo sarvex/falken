@@ -78,5 +78,4 @@ class ArgMaxOptionsT(object):
     def Pack(self, builder):
         ArgMaxOptionsStart(builder)
         ArgMaxOptionsAddOutputType(builder, self.outputType)
-        argMaxOptions = ArgMaxOptionsEnd(builder)
-        return argMaxOptions
+        return ArgMaxOptionsEnd(builder)

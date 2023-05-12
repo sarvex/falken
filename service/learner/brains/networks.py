@@ -148,6 +148,5 @@ def _get_dropout(hparams):
     return [None] * len(hparams['fc_layers'])
   if isinstance(hparams['dropout'], list):
     return hparams['dropout']
-  else:
-    assert isinstance(hparams['dropout'], float)
-    return [hparams['dropout']] * len(hparams['fc_layers'])
+  assert isinstance(hparams['dropout'], float)
+  return [hparams['dropout']] * len(hparams['fc_layers'])

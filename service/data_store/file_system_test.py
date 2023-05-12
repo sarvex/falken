@@ -119,10 +119,8 @@ class FileSystemTest(parameterized.TestCase):
     time_mock.return_value = 103
     with mock.patch.object(os.path, 'getmtime') as getmtime_mock:
       def _getmtime_side_effect(path):
-        if path.endswith('file.pb'):
-          return 102
-        else:
-          return 101
+        return 102 if path.endswith('file.pb') else 101
+
       getmtime_mock.side_effect = _getmtime_side_effect
       self.assertEqual(
           self._fs.get_staleness('dirA'),

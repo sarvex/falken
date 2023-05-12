@@ -98,8 +98,8 @@ def _validate_session(
         'Session type not set in the request. Please specify session type.')
 
   brain_id = session_spec.brain_id
-  if (session_spec.session_type == session_pb2.INFERENCE or
-      session_spec.session_type == session_pb2.EVALUATION) and not snapshot_id:
+  if (session_spec.session_type
+      in [session_pb2.INFERENCE, session_pb2.EVALUATION] and not snapshot_id):
     context.abort(
         code_pb2.INVALID_ARGUMENT,
         f'Session type {session_spec.session_type} requires a starting '
@@ -132,6 +132,4 @@ def _get_snapshot_id_and_previous_session_id(session_spec, data_store):
   else:
     snapshot = data_store.get_most_recent_snapshot(
         session_spec.project_id, session_spec.brain_id)
-  if snapshot:
-    return snapshot.snapshot_id, snapshot.session
-  return '', ''
+  return (snapshot.snapshot_id, snapshot.session) if snapshot else ('', '')

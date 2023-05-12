@@ -89,5 +89,4 @@ class RNNOptionsT(object):
         RNNOptionsStart(builder)
         RNNOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         RNNOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        rNNOptions = RNNOptionsEnd(builder)
-        return rNNOptions
+        return RNNOptionsEnd(builder)

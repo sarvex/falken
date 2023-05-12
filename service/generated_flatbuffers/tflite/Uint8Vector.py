@@ -56,9 +56,7 @@ class Uint8Vector(object):
     # Uint8Vector
     def ValuesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Uint8Vector
     def ValuesIsNone(self):
@@ -97,13 +95,15 @@ class Uint8VectorT(object):
     def _UnPack(self, uint8Vector):
         if uint8Vector is None:
             return
-        if not uint8Vector.ValuesIsNone():
-            if np is None:
+        if np is None:
+            if not uint8Vector.ValuesIsNone():
                 self.values = []
-                for i in range(uint8Vector.ValuesLength()):
-                    self.values.append(uint8Vector.Values(i))
-            else:
-                self.values = uint8Vector.ValuesAsNumpy()
+                self.values.extend(
+                    uint8Vector.Values(i)
+                    for i in range(uint8Vector.ValuesLength())
+                )
+        elif not uint8Vector.ValuesIsNone():
+            self.values = uint8Vector.ValuesAsNumpy()
 
     # Uint8VectorT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class Uint8VectorT(object):
         Uint8VectorStart(builder)
         if self.values is not None:
             Uint8VectorAddValues(builder, values)
-        uint8Vector = Uint8VectorEnd(builder)
-        return uint8Vector
+        return Uint8VectorEnd(builder)

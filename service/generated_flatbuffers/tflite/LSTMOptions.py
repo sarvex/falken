@@ -122,5 +122,4 @@ class LSTMOptionsT(object):
         LSTMOptionsAddProjClip(builder, self.projClip)
         LSTMOptionsAddKernelType(builder, self.kernelType)
         LSTMOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        lSTMOptions = LSTMOptionsEnd(builder)
-        return lSTMOptions
+        return LSTMOptionsEnd(builder)

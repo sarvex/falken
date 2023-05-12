@@ -68,5 +68,4 @@ class CosOptionsT(object):
     # CosOptionsT
     def Pack(self, builder):
         CosOptionsStart(builder)
-        cosOptions = CosOptionsEnd(builder)
-        return cosOptions
+        return CosOptionsEnd(builder)

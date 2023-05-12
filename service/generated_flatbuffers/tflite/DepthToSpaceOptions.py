@@ -78,5 +78,4 @@ class DepthToSpaceOptionsT(object):
     def Pack(self, builder):
         DepthToSpaceOptionsStart(builder)
         DepthToSpaceOptionsAddBlockSize(builder, self.blockSize)
-        depthToSpaceOptions = DepthToSpaceOptionsEnd(builder)
-        return depthToSpaceOptions
+        return DepthToSpaceOptionsEnd(builder)

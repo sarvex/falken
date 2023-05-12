@@ -68,5 +68,4 @@ class NonMaxSuppressionV5OptionsT(object):
     # NonMaxSuppressionV5OptionsT
     def Pack(self, builder):
         NonMaxSuppressionV5OptionsStart(builder)
-        nonMaxSuppressionV5Options = NonMaxSuppressionV5OptionsEnd(builder)
-        return nonMaxSuppressionV5Options
+        return NonMaxSuppressionV5OptionsEnd(builder)

@@ -138,9 +138,11 @@ class LayersTest(parameterized.TestCase):
       outputs = layer(input_tensor)
       # Instead of making output_channels depend on input_count
       # we could add a single fully connected layer when input_count <= 4.
-      expected_shape = (batch_size,
-                        input_count if input_count <= 4 else 4,
-                        input_channels if input_count <= 4 else output_channels)
+      expected_shape = (
+          batch_size,
+          min(input_count, 4),
+          input_channels if input_count <= 4 else output_channels,
+      )
       self.assertEqual(outputs.shape, expected_shape)
 
   @parameterized.parameters(

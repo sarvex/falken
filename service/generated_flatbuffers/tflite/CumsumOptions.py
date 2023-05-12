@@ -89,5 +89,4 @@ class CumsumOptionsT(object):
         CumsumOptionsStart(builder)
         CumsumOptionsAddExclusive(builder, self.exclusive)
         CumsumOptionsAddReverse(builder, self.reverse)
-        cumsumOptions = CumsumOptionsEnd(builder)
-        return cumsumOptions
+        return CumsumOptionsEnd(builder)

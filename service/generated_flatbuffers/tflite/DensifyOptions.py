@@ -68,5 +68,4 @@ class DensifyOptionsT(object):
     # DensifyOptionsT
     def Pack(self, builder):
         DensifyOptionsStart(builder)
-        densifyOptions = DensifyOptionsEnd(builder)
-        return densifyOptions
+        return DensifyOptionsEnd(builder)

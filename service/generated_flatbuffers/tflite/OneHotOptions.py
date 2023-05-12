@@ -78,5 +78,4 @@ class OneHotOptionsT(object):
     def Pack(self, builder):
         OneHotOptionsStart(builder)
         OneHotOptionsAddAxis(builder, self.axis)
-        oneHotOptions = OneHotOptionsEnd(builder)
-        return oneHotOptions
+        return OneHotOptionsEnd(builder)

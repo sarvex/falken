@@ -27,7 +27,6 @@ def extract_metadata_value(context, key):
     Value string, e.g. 'grpc-c/16.0.0 (linux; chttp2)'
   """
   metadata = context.invocation_metadata()
-  value_list = [kv[1] for kv in metadata if kv[0] == key]
-  if value_list:
+  if value_list := [kv[1] for kv in metadata if kv[0] == key]:
     return value_list[0]
   return ''

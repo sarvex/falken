@@ -381,7 +381,4 @@ def egocentric_signal_to_target_frame(
   camera_control_vector_y = vector_dot(control_fwd, world_space_direction,
                                        scalar_out=False)
 
-  camera_control_vector = tf.concat([camera_control_vector_x,
-                                     camera_control_vector_y], axis=-1)
-
-  return camera_control_vector
+  return tf.concat([camera_control_vector_x, camera_control_vector_y], axis=-1)

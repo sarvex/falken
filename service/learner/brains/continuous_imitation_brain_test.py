@@ -294,8 +294,8 @@ class ContinuousImitationBrainTest(parameterized.TestCase):
       del dir_contents[tflite_dir]
 
     for path, contents in dir_contents.items():
-      self.assertCountEqual(
-          glob.glob(path + '/*'), [os.path.join(path, c) for c in contents])
+      self.assertCountEqual(glob.glob(f'{path}/*'),
+                            [os.path.join(path, c) for c in contents])
 
   def test_checkpoint_restore(self):
     self._init_brain()

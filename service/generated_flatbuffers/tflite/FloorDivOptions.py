@@ -68,5 +68,4 @@ class FloorDivOptionsT(object):
     # FloorDivOptionsT
     def Pack(self, builder):
         FloorDivOptionsStart(builder)
-        floorDivOptions = FloorDivOptionsEnd(builder)
-        return floorDivOptions
+        return FloorDivOptionsEnd(builder)

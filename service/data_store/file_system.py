@@ -128,9 +128,9 @@ class FileSystem(object):
     """
     result = []
     for p in braceexpand.braceexpand(posix_path(pattern)):
-      for f in glob.glob(self._resolve(p)):
-        if os.access(f, os.R_OK):
-          result.append(posix_path(os.path.relpath(f, self._root_path)))
+      result.extend(
+          posix_path(os.path.relpath(f, self._root_path))
+          for f in glob.glob(self._resolve(p)) if os.access(f, os.R_OK))
     return result
 
   def exists(self, path):

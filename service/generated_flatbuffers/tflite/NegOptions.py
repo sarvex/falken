@@ -68,5 +68,4 @@ class NegOptionsT(object):
     # NegOptionsT
     def Pack(self, builder):
         NegOptionsStart(builder)
-        negOptions = NegOptionsEnd(builder)
-        return negOptions
+        return NegOptionsEnd(builder)

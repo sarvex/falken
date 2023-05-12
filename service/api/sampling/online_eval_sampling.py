@@ -35,10 +35,7 @@ class ModelRecord(NamedTuple):
   @property
   def success_rate(self) -> float:
     """Return the empirical success rate or 0.0 if no evaluations."""
-    if self.total:
-      return self.successes / self.total
-    else:
-      return 0.0
+    return self.successes / self.total if self.total else 0.0
 
 
 class SamplingStrategy(abc.ABC):

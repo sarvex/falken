@@ -61,7 +61,8 @@ def create_brain(request, context, data_store):
   except specs.InvalidSpecError as e:
     context.abort(
         code_pb2.INVALID_ARGUMENT,
-        'Unable to create Brain. BrainSpec spec invalid. Error: ' + repr(e))
+        f'Unable to create Brain. BrainSpec spec invalid. Error: {repr(e)}',
+    )
     return
 
   write_data_store_brain = data_store_pb2.Brain(

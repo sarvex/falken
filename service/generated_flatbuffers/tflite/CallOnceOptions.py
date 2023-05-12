@@ -78,5 +78,4 @@ class CallOnceOptionsT(object):
     def Pack(self, builder):
         CallOnceOptionsStart(builder)
         CallOnceOptionsAddInitSubgraphIndex(builder, self.initSubgraphIndex)
-        callOnceOptions = CallOnceOptionsEnd(builder)
-        return callOnceOptions
+        return CallOnceOptionsEnd(builder)

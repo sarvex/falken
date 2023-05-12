@@ -72,10 +72,10 @@ class JoystickActionProjection(
       raise InvalidTypeError(
           f'Unsupported controlled_entity: {proto_spec.controlled_entity}')
 
-    if proto_spec.axes_mode == action_pb2.DIRECTION_XZ:
-      if proto_spec.control_frame not in ('player', 'camera', ''):
-        raise InvalidTypeError(
-            f'Unsupported control_frame: {proto_spec.control_frame}')
+    if (proto_spec.axes_mode == action_pb2.DIRECTION_XZ
+        and proto_spec.control_frame not in ('player', 'camera', '')):
+      raise InvalidTypeError(
+          f'Unsupported control_frame: {proto_spec.control_frame}')
 
     self._proto_spec = proto_spec
     init_action_stddev = 0.35  # Default value from tf-agents code.

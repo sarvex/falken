@@ -68,5 +68,4 @@ class SelectOptionsT(object):
     # SelectOptionsT
     def Pack(self, builder):
         SelectOptionsStart(builder)
-        selectOptions = SelectOptionsEnd(builder)
-        return selectOptions
+        return SelectOptionsEnd(builder)

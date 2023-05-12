@@ -68,5 +68,4 @@ class LogicalOrOptionsT(object):
     # LogicalOrOptionsT
     def Pack(self, builder):
         LogicalOrOptionsStart(builder)
-        logicalOrOptions = LogicalOrOptionsEnd(builder)
-        return logicalOrOptions
+        return LogicalOrOptionsEnd(builder)

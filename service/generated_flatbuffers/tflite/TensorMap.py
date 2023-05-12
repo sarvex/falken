@@ -41,9 +41,7 @@ class TensorMap(object):
     # TensorMap
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
     # TensorMap
     def TensorIndex(self):
@@ -92,5 +90,4 @@ class TensorMapT(object):
         if self.name is not None:
             TensorMapAddName(builder, name)
         TensorMapAddTensorIndex(builder, self.tensorIndex)
-        tensorMap = TensorMapEnd(builder)
-        return tensorMap
+        return TensorMapEnd(builder)

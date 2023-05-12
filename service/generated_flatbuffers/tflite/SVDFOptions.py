@@ -100,5 +100,4 @@ class SVDFOptionsT(object):
         SVDFOptionsAddRank(builder, self.rank)
         SVDFOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         SVDFOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        sVDFOptions = SVDFOptionsEnd(builder)
-        return sVDFOptions
+        return SVDFOptionsEnd(builder)

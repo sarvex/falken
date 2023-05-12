@@ -68,5 +68,4 @@ class AbsOptionsT(object):
     # AbsOptionsT
     def Pack(self, builder):
         AbsOptionsStart(builder)
-        absOptions = AbsOptionsEnd(builder)
-        return absOptions
+        return AbsOptionsEnd(builder)

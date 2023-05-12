@@ -68,5 +68,4 @@ class ExpOptionsT(object):
     # ExpOptionsT
     def Pack(self, builder):
         ExpOptionsStart(builder)
-        expOptions = ExpOptionsEnd(builder)
-        return expOptions
+        return ExpOptionsEnd(builder)

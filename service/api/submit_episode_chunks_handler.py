@@ -291,10 +291,10 @@ def _get_steps_type(chunk):
   for step in chunk.steps:
     if step.action.source == action_pb2.ActionData.HUMAN_DEMONSTRATION:
       seen_human_demo = True
-    # We don't make a distinction between NO_SOURCE and BRAIN_ACTION at the
-    # chunk level for simplicity.
-    elif (step.action.source == action_pb2.ActionData.BRAIN_ACTION or
-          step.action.source == action_pb2.ActionData.NO_SOURCE):
+    elif step.action.source in [
+          action_pb2.ActionData.BRAIN_ACTION,
+          action_pb2.ActionData.NO_SOURCE,
+      ]:
       seen_brain_action = True
     else:
       raise ValueError(f'Unsupported step type: {step.action.source}')

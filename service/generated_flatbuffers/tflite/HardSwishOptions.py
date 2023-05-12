@@ -68,5 +68,4 @@ class HardSwishOptionsT(object):
     # HardSwishOptionsT
     def Pack(self, builder):
         HardSwishOptionsStart(builder)
-        hardSwishOptions = HardSwishOptionsEnd(builder)
-        return hardSwishOptions
+        return HardSwishOptionsEnd(builder)

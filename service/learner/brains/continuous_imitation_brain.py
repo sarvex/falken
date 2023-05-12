@@ -166,10 +166,7 @@ class BCAgent(behavioral_cloning_agent.BehavioralCloningAgent):
 def _outer_dim_length(nested_tensor):
   """Return length of the outer (time or batch) dimension."""
   flat = tf.nest.flatten(nested_tensor)
-  if not flat:
-    return 0
-  else:
-    return len(flat[0])
+  return 0 if not flat else len(flat[0])
 
 
 def _select_sub_trajectories(traj_generator,
@@ -279,7 +276,7 @@ def _atomic_write_string_to_file(filename, contents, overwrite=True):
   if not tf_file_io.has_atomic_move(filename):
     tf_file_io.write_string_to_file(filename, contents)
   else:
-    temp_pathname = filename + '.tmp' + uuid.uuid4().hex
+    temp_pathname = f'{filename}.tmp{uuid.uuid4().hex}'
     tf_file_io.write_string_to_file(temp_pathname, contents)
     try:
       if overwrite and os.path.exists(filename):
@@ -746,11 +743,7 @@ class ContinuousImitationBrain:
     # tensorflow checkpoint dir to the export location at policy_path.
     # Checkpoint files start with '<checkpoint_name>.'.
     os.makedirs(save_dir, exist_ok=True)
-    for checkpoint_filename, copy in (
-        [(fname, False) for fname in glob.glob(checkpoint_path_prefix + '.*')] +
-        # Copy 'checkpoint' metadata file (tracks state of the checkpoint
-        # manager).
-        [(os.path.join(checkpoint_dir, 'checkpoint'), True)]):
+    for checkpoint_filename, copy in ([(fname, False) for fname in glob.glob(f'{checkpoint_path_prefix}.*')] + [(os.path.join(checkpoint_dir, 'checkpoint'), True)]):
       target_filename = os.path.join(
           save_dir, os.path.basename(checkpoint_filename))
       if copy:
@@ -809,8 +802,8 @@ class ContinuousImitationBrain:
             hparams=self._hparams)
         if not eval_brain.latest_checkpoint:
           raise NoCheckpointFoundError(
-              f'No checkpoints found in dir {cp_path}, {cp_path}/* is '
-              + str(glob.glob(cp_path + '*')))
+              (f'No checkpoints found in dir {cp_path}, {cp_path}/* is ' +
+               str(glob.glob(f'{cp_path}*'))))
         yield from eval_brain.full_eval_from_datastore(self._eval_datastore)
 
   def _py_fun_get_experiences(self, iterator):

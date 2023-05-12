@@ -144,5 +144,4 @@ class DepthwiseConv2DOptionsT(object):
         DepthwiseConv2DOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         DepthwiseConv2DOptionsAddDilationWFactor(builder, self.dilationWFactor)
         DepthwiseConv2DOptionsAddDilationHFactor(builder, self.dilationHFactor)
-        depthwiseConv2DOptions = DepthwiseConv2DOptionsEnd(builder)
-        return depthwiseConv2DOptions
+        return DepthwiseConv2DOptionsEnd(builder)

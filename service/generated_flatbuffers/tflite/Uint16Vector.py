@@ -56,9 +56,7 @@ class Uint16Vector(object):
     # Uint16Vector
     def ValuesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # Uint16Vector
     def ValuesIsNone(self):
@@ -97,13 +95,15 @@ class Uint16VectorT(object):
     def _UnPack(self, uint16Vector):
         if uint16Vector is None:
             return
-        if not uint16Vector.ValuesIsNone():
-            if np is None:
+        if np is None:
+            if not uint16Vector.ValuesIsNone():
                 self.values = []
-                for i in range(uint16Vector.ValuesLength()):
-                    self.values.append(uint16Vector.Values(i))
-            else:
-                self.values = uint16Vector.ValuesAsNumpy()
+                self.values.extend(
+                    uint16Vector.Values(i)
+                    for i in range(uint16Vector.ValuesLength())
+                )
+        elif not uint16Vector.ValuesIsNone():
+            self.values = uint16Vector.ValuesAsNumpy()
 
     # Uint16VectorT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class Uint16VectorT(object):
         Uint16VectorStart(builder)
         if self.values is not None:
             Uint16VectorAddValues(builder, values)
-        uint16Vector = Uint16VectorEnd(builder)
-        return uint16Vector
+        return Uint16VectorEnd(builder)

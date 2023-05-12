@@ -78,5 +78,4 @@ class SparseToDenseOptionsT(object):
     def Pack(self, builder):
         SparseToDenseOptionsStart(builder)
         SparseToDenseOptionsAddValidateIndices(builder, self.validateIndices)
-        sparseToDenseOptions = SparseToDenseOptionsEnd(builder)
-        return sparseToDenseOptions
+        return SparseToDenseOptionsEnd(builder)

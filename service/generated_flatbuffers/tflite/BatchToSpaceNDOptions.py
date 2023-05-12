@@ -68,5 +68,4 @@ class BatchToSpaceNDOptionsT(object):
     # BatchToSpaceNDOptionsT
     def Pack(self, builder):
         BatchToSpaceNDOptionsStart(builder)
-        batchToSpaceNDOptions = BatchToSpaceNDOptionsEnd(builder)
-        return batchToSpaceNDOptions
+        return BatchToSpaceNDOptionsEnd(builder)

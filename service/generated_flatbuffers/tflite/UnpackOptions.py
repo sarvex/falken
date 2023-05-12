@@ -89,5 +89,4 @@ class UnpackOptionsT(object):
         UnpackOptionsStart(builder)
         UnpackOptionsAddNum(builder, self.num)
         UnpackOptionsAddAxis(builder, self.axis)
-        unpackOptions = UnpackOptionsEnd(builder)
-        return unpackOptions
+        return UnpackOptionsEnd(builder)

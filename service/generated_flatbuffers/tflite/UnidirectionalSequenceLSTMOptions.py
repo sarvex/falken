@@ -122,5 +122,4 @@ class UnidirectionalSequenceLSTMOptionsT(object):
         UnidirectionalSequenceLSTMOptionsAddProjClip(builder, self.projClip)
         UnidirectionalSequenceLSTMOptionsAddTimeMajor(builder, self.timeMajor)
         UnidirectionalSequenceLSTMOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        unidirectionalSequenceLSTMOptions = UnidirectionalSequenceLSTMOptionsEnd(builder)
-        return unidirectionalSequenceLSTMOptions
+        return UnidirectionalSequenceLSTMOptionsEnd(builder)

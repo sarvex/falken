@@ -56,9 +56,7 @@ class SqueezeOptions(object):
     # SqueezeOptions
     def SqueezeDimsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SqueezeOptions
     def SqueezeDimsIsNone(self):
@@ -97,13 +95,15 @@ class SqueezeOptionsT(object):
     def _UnPack(self, squeezeOptions):
         if squeezeOptions is None:
             return
-        if not squeezeOptions.SqueezeDimsIsNone():
-            if np is None:
+        if np is None:
+            if not squeezeOptions.SqueezeDimsIsNone():
                 self.squeezeDims = []
-                for i in range(squeezeOptions.SqueezeDimsLength()):
-                    self.squeezeDims.append(squeezeOptions.SqueezeDims(i))
-            else:
-                self.squeezeDims = squeezeOptions.SqueezeDimsAsNumpy()
+                self.squeezeDims.extend(
+                    squeezeOptions.SqueezeDims(i)
+                    for i in range(squeezeOptions.SqueezeDimsLength())
+                )
+        elif not squeezeOptions.SqueezeDimsIsNone():
+            self.squeezeDims = squeezeOptions.SqueezeDimsAsNumpy()
 
     # SqueezeOptionsT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class SqueezeOptionsT(object):
         SqueezeOptionsStart(builder)
         if self.squeezeDims is not None:
             SqueezeOptionsAddSqueezeDims(builder, squeezeDims)
-        squeezeOptions = SqueezeOptionsEnd(builder)
-        return squeezeOptions
+        return SqueezeOptionsEnd(builder)

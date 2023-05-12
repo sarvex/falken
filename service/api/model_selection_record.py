@@ -80,7 +80,7 @@ class ModelScores:
   @property
   def model_ids(self):
     """Returns the set of model IDs stored in this object."""
-    return set([model_score.model_id for model_score in self._model_scores])
+    return {model_score.model_id for model_score in self._model_scores}
 
 
 class OfflineEvaluationByAssignmentAndEvalId(collections.defaultdict):
@@ -152,7 +152,7 @@ class OfflineEvaluationByAssignmentAndEvalId(collections.defaultdict):
   @property
   def assignment_ids(self):
     """Returns assignment IDs in the keys of this dictionary."""
-    return set([key.assignment_id for key in self.keys()])
+    return {key.assignment_id for key in self.keys()}
 
 
 class SummaryMap(collections.defaultdict):

@@ -150,12 +150,12 @@ class ModelSelector:
 
   def _best_offline_model(self):
     """Goes through offline evaluations and returns model ID with best score."""
-    offline_eval_summary = self._get_offline_eval_summary(
-        self._session_resource_id)
-    if not offline_eval_summary:
+    if offline_eval_summary := self._get_offline_eval_summary(
+        self._session_resource_id):
+      return offline_eval_summary.scores_by_offline_evaluation_id()[0][1].model_id
+    else:
       raise FileNotFoundError('No offline eval found for session '
                               f'{self._session_resource_id.session}.')
-    return offline_eval_summary.scores_by_offline_evaluation_id()[0][1].model_id
 
   def _next_online_eval_model(self):
     """Selects the next model resource ID based on the online eval results."""
@@ -256,13 +256,12 @@ class ModelSelector:
   def session_progress(self):
     """Get this session's progress float, lazily initialized."""
     if not self._progress:
-      progress_per_assignment = self._data_store.get_assignment_progress(
-          self._session_resource_id)
-      if not progress_per_assignment:
-        self._progress = 0.0
-      else:
+      if progress_per_assignment := self._data_store.get_assignment_progress(
+          self._session_resource_id):
         self._progress = (
             sum(progress_per_assignment.values())/len(progress_per_assignment))
+      else:
+        self._progress = 0.0
     return self._progress
 
   def _is_session_training(self):
@@ -333,9 +332,10 @@ class ModelSelector:
         brain_id=session_resource_id.brain,
         session_id=session_resource_id.session,
         assignment_id='*')
-    assignment_ids = set(
-        [data_cache.get_assignment_id(self._data_store, res_id)
-         for res_id in assignment_resource_ids])
+    assignment_ids = {
+        data_cache.get_assignment_id(self._data_store, res_id)
+        for res_id in assignment_resource_ids
+    }
 
     offline_eval_summary = (
         model_selection_record.OfflineEvaluationByAssignmentAndEvalId())
@@ -458,10 +458,9 @@ class ModelSelector:
       online_scores: List of online scores to update the SummaryMap with.
       summary_map: SummaryMap instance to update.
     """
-    existing_eval_summary = (
+    if existing_eval_summary := (
         summary_map.eval_summary_for_assignment_and_model(
-            assignment_id, model_score.model_id))
-    if existing_eval_summary:
+            assignment_id, model_score.model_id)):
       existing_eval_summary.offline_scores[eval_id] = model_score.score
     else:
       summary_map[assignment_id].append(

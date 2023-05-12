@@ -78,5 +78,4 @@ class ArgMinOptionsT(object):
     def Pack(self, builder):
         ArgMinOptionsStart(builder)
         ArgMinOptionsAddOutputType(builder, self.outputType)
-        argMinOptions = ArgMinOptionsEnd(builder)
-        return argMinOptions
+        return ArgMinOptionsEnd(builder)

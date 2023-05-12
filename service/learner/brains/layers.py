@@ -251,9 +251,7 @@ class FeelersV2(tf.keras.layers.Layer,
 
   def _next_power_of_two(self, n):
     """Return the smallest power of two >= n."""
-    if n == 0:
-      return 1
-    return int(2 ** math.ceil(math.log2(n)))
+    return 1 if n == 0 else int(2 ** math.ceil(math.log2(n)))
 
   def initialize_weights(self):
     """Initialize weights in the layer."""

@@ -56,9 +56,7 @@ class CustomQuantization(object):
     # CustomQuantization
     def CustomLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # CustomQuantization
     def CustomIsNone(self):
@@ -97,13 +95,15 @@ class CustomQuantizationT(object):
     def _UnPack(self, customQuantization):
         if customQuantization is None:
             return
-        if not customQuantization.CustomIsNone():
-            if np is None:
+        if np is None:
+            if not customQuantization.CustomIsNone():
                 self.custom = []
-                for i in range(customQuantization.CustomLength()):
-                    self.custom.append(customQuantization.Custom(i))
-            else:
-                self.custom = customQuantization.CustomAsNumpy()
+                self.custom.extend(
+                    customQuantization.Custom(i)
+                    for i in range(customQuantization.CustomLength())
+                )
+        elif not customQuantization.CustomIsNone():
+            self.custom = customQuantization.CustomAsNumpy()
 
     # CustomQuantizationT
     def Pack(self, builder):
@@ -118,5 +118,4 @@ class CustomQuantizationT(object):
         CustomQuantizationStart(builder)
         if self.custom is not None:
             CustomQuantizationAddCustom(builder, custom)
-        customQuantization = CustomQuantizationEnd(builder)
-        return customQuantization
+        return CustomQuantizationEnd(builder)

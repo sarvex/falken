@@ -89,5 +89,4 @@ class ResizeNearestNeighborOptionsT(object):
         ResizeNearestNeighborOptionsStart(builder)
         ResizeNearestNeighborOptionsAddAlignCorners(builder, self.alignCorners)
         ResizeNearestNeighborOptionsAddHalfPixelCenters(builder, self.halfPixelCenters)
-        resizeNearestNeighborOptions = ResizeNearestNeighborOptionsEnd(builder)
-        return resizeNearestNeighborOptions
+        return ResizeNearestNeighborOptionsEnd(builder)

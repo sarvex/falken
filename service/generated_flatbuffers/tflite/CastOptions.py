@@ -89,5 +89,4 @@ class CastOptionsT(object):
         CastOptionsStart(builder)
         CastOptionsAddInDataType(builder, self.inDataType)
         CastOptionsAddOutDataType(builder, self.outDataType)
-        castOptions = CastOptionsEnd(builder)
-        return castOptions
+        return CastOptionsEnd(builder)

@@ -56,9 +56,7 @@ class QuantizationParameters(object):
     # QuantizationParameters
     def MinLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # QuantizationParameters
     def MinIsNone(self):
@@ -83,9 +81,7 @@ class QuantizationParameters(object):
     # QuantizationParameters
     def MaxLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # QuantizationParameters
     def MaxIsNone(self):
@@ -110,9 +106,7 @@ class QuantizationParameters(object):
     # QuantizationParameters
     def ScaleLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # QuantizationParameters
     def ScaleIsNone(self):
@@ -137,9 +131,7 @@ class QuantizationParameters(object):
     # QuantizationParameters
     def ZeroPointLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # QuantizationParameters
     def ZeroPointIsNone(self):
@@ -219,32 +211,40 @@ class QuantizationParametersT(object):
     def _UnPack(self, quantizationParameters):
         if quantizationParameters is None:
             return
-        if not quantizationParameters.MinIsNone():
-            if np is None:
+        if np is None:
+            if not quantizationParameters.MinIsNone():
                 self.min = []
-                for i in range(quantizationParameters.MinLength()):
-                    self.min.append(quantizationParameters.Min(i))
-            else:
-                self.min = quantizationParameters.MinAsNumpy()
+                self.min.extend(
+                    quantizationParameters.Min(i)
+                    for i in range(quantizationParameters.MinLength())
+                )
+        elif not quantizationParameters.MinIsNone():
+            self.min = quantizationParameters.MinAsNumpy()
         if not quantizationParameters.MaxIsNone():
             if np is None:
                 self.max = []
-                for i in range(quantizationParameters.MaxLength()):
-                    self.max.append(quantizationParameters.Max(i))
+                self.max.extend(
+                    quantizationParameters.Max(i)
+                    for i in range(quantizationParameters.MaxLength())
+                )
             else:
                 self.max = quantizationParameters.MaxAsNumpy()
         if not quantizationParameters.ScaleIsNone():
             if np is None:
                 self.scale = []
-                for i in range(quantizationParameters.ScaleLength()):
-                    self.scale.append(quantizationParameters.Scale(i))
+                self.scale.extend(
+                    quantizationParameters.Scale(i)
+                    for i in range(quantizationParameters.ScaleLength())
+                )
             else:
                 self.scale = quantizationParameters.ScaleAsNumpy()
         if not quantizationParameters.ZeroPointIsNone():
             if np is None:
                 self.zeroPoint = []
-                for i in range(quantizationParameters.ZeroPointLength()):
-                    self.zeroPoint.append(quantizationParameters.ZeroPoint(i))
+                self.zeroPoint.extend(
+                    quantizationParameters.ZeroPoint(i)
+                    for i in range(quantizationParameters.ZeroPointLength())
+                )
             else:
                 self.zeroPoint = quantizationParameters.ZeroPointAsNumpy()
         self.detailsType = quantizationParameters.DetailsType()
@@ -300,5 +300,4 @@ class QuantizationParametersT(object):
         if self.details is not None:
             QuantizationParametersAddDetails(builder, details)
         QuantizationParametersAddQuantizedDimension(builder, self.quantizedDimension)
-        quantizationParameters = QuantizationParametersEnd(builder)
-        return quantizationParameters
+        return QuantizationParametersEnd(builder)

@@ -68,5 +68,4 @@ class PadV2OptionsT(object):
     # PadV2OptionsT
     def Pack(self, builder):
         PadV2OptionsStart(builder)
-        padV2Options = PadV2OptionsEnd(builder)
-        return padV2Options
+        return PadV2OptionsEnd(builder)

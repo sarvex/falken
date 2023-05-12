@@ -89,5 +89,4 @@ class ResizeBilinearOptionsT(object):
         ResizeBilinearOptionsStart(builder)
         ResizeBilinearOptionsAddAlignCorners(builder, self.alignCorners)
         ResizeBilinearOptionsAddHalfPixelCenters(builder, self.halfPixelCenters)
-        resizeBilinearOptions = ResizeBilinearOptionsEnd(builder)
-        return resizeBilinearOptions
+        return ResizeBilinearOptionsEnd(builder)

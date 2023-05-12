@@ -165,15 +165,12 @@ def _create_tflite_to_tf_tensor_name_map(graph) -> typing.Tuple[
     where each entry of the tuple is a dictionary of TF TensorSpec names
     indexed by TF Lite tensor names for inputs and outputs respectively.
   """
-  # Create a mapping of input TensorSpec names to Tensor / argument names.
-  arg_name_to_structured_input_name = {}
   args, kwargs = graph.structured_input_signature
-  for input_tensor_spec in list(args) + list(kwargs.values()):
-    # Add :0 to the name as all inputs are not positional.
-    arg_name_to_structured_input_name[
-        _tf_tensor_spec_name_to_tensor_name(input_tensor_spec.name) + ':0'] = (
-            input_tensor_spec.name)
-
+  arg_name_to_structured_input_name = {
+      f'{_tf_tensor_spec_name_to_tensor_name(input_tensor_spec.name)}:0':
+      input_tensor_spec.name
+      for input_tensor_spec in list(args) + list(kwargs.values())
+  }
   # Map each TFLite input name to the original TensorSpec name.
   inputs_tflite_name_to_tf_map = {}
   for input_tensor in graph.inputs:
@@ -187,15 +184,12 @@ def _create_tflite_to_tf_tensor_name_map(graph) -> typing.Tuple[
         _tf_tensor_name_to_tflite_name(input_tensor.name)] = (
             arg_name_to_structured_input_name[input_tensor.name])
 
-  # This follows the same logic in
-  # tf.function.ConcreteFunction._build_call_outputs() to order
-  # output_signatures in the same order as the generated output tensors
-  # making it possible to map from each output Tensor to the associated
-  # TensorSpec that generated it.
-  outputs_tflite_name_to_tf_map = {}
-  for output_tensor, output_tensor_spec in zip(
-      graph.outputs, tf.nest.flatten(graph.structured_outputs,
-                                     expand_composites=True)):
-    outputs_tflite_name_to_tf_map[_tf_tensor_name_to_tflite_name(
-        output_tensor.name)] = output_tensor_spec.name
+  outputs_tflite_name_to_tf_map = {
+      _tf_tensor_name_to_tflite_name(output_tensor.name):
+      output_tensor_spec.name
+      for output_tensor, output_tensor_spec in zip(
+          graph.outputs,
+          tf.nest.flatten(graph.structured_outputs, expand_composites=True),
+      )
+  }
   return (inputs_tflite_name_to_tf_map, outputs_tflite_name_to_tf_map)

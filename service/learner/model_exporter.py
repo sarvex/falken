@@ -143,11 +143,11 @@ class ModelExporter:
     """Loop that is exporting models."""
     while True:
       try:
-        export_info = self._queue.get(block=True)
-        if not export_info:
-          break
-        self._export_model(export_info)
+        if export_info := self._queue.get(block=True):
+          self._export_model(export_info)
 
+        else:
+          break
       except queue.Empty:
         continue
 

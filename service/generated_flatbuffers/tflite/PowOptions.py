@@ -68,5 +68,4 @@ class PowOptionsT(object):
     # PowOptionsT
     def Pack(self, builder):
         PowOptionsStart(builder)
-        powOptions = PowOptionsEnd(builder)
-        return powOptions
+        return PowOptionsEnd(builder)

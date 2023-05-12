@@ -63,9 +63,7 @@ class ConcatEmbeddingsOptions(object):
     # ConcatEmbeddingsOptions
     def NumColumnsPerChannelLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # ConcatEmbeddingsOptions
     def NumColumnsPerChannelIsNone(self):
@@ -90,9 +88,7 @@ class ConcatEmbeddingsOptions(object):
     # ConcatEmbeddingsOptions
     def EmbeddingDimPerChannelLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # ConcatEmbeddingsOptions
     def EmbeddingDimPerChannelIsNone(self):
@@ -137,18 +133,26 @@ class ConcatEmbeddingsOptionsT(object):
         if concatEmbeddingsOptions is None:
             return
         self.numChannels = concatEmbeddingsOptions.NumChannels()
-        if not concatEmbeddingsOptions.NumColumnsPerChannelIsNone():
-            if np is None:
+        if np is None:
+            if not concatEmbeddingsOptions.NumColumnsPerChannelIsNone():
                 self.numColumnsPerChannel = []
-                for i in range(concatEmbeddingsOptions.NumColumnsPerChannelLength()):
-                    self.numColumnsPerChannel.append(concatEmbeddingsOptions.NumColumnsPerChannel(i))
-            else:
-                self.numColumnsPerChannel = concatEmbeddingsOptions.NumColumnsPerChannelAsNumpy()
+                self.numColumnsPerChannel.extend(
+                    concatEmbeddingsOptions.NumColumnsPerChannel(i)
+                    for i in range(
+                        concatEmbeddingsOptions.NumColumnsPerChannelLength()
+                    )
+                )
+        elif not concatEmbeddingsOptions.NumColumnsPerChannelIsNone():
+            self.numColumnsPerChannel = concatEmbeddingsOptions.NumColumnsPerChannelAsNumpy()
         if not concatEmbeddingsOptions.EmbeddingDimPerChannelIsNone():
             if np is None:
                 self.embeddingDimPerChannel = []
-                for i in range(concatEmbeddingsOptions.EmbeddingDimPerChannelLength()):
-                    self.embeddingDimPerChannel.append(concatEmbeddingsOptions.EmbeddingDimPerChannel(i))
+                self.embeddingDimPerChannel.extend(
+                    concatEmbeddingsOptions.EmbeddingDimPerChannel(i)
+                    for i in range(
+                        concatEmbeddingsOptions.EmbeddingDimPerChannelLength()
+                    )
+                )
             else:
                 self.embeddingDimPerChannel = concatEmbeddingsOptions.EmbeddingDimPerChannelAsNumpy()
 
@@ -176,5 +180,4 @@ class ConcatEmbeddingsOptionsT(object):
             ConcatEmbeddingsOptionsAddNumColumnsPerChannel(builder, numColumnsPerChannel)
         if self.embeddingDimPerChannel is not None:
             ConcatEmbeddingsOptionsAddEmbeddingDimPerChannel(builder, embeddingDimPerChannel)
-        concatEmbeddingsOptions = ConcatEmbeddingsOptionsEnd(builder)
-        return concatEmbeddingsOptions
+        return ConcatEmbeddingsOptionsEnd(builder)

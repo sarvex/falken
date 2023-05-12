@@ -78,5 +78,4 @@ class SoftmaxOptionsT(object):
     def Pack(self, builder):
         SoftmaxOptionsStart(builder)
         SoftmaxOptionsAddBeta(builder, self.beta)
-        softmaxOptions = SoftmaxOptionsEnd(builder)
-        return softmaxOptions
+        return SoftmaxOptionsEnd(builder)

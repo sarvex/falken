@@ -71,9 +71,10 @@ def process_ref(args: argparse.Namespace) -> bool:
   valid_char_set = set(valid_characters)
 
   if not (set(release_name) <= valid_char_set):
-    logging.error('The extracted release name "{}" contains invalid characters.'
-        .format(release_name))
-    logging.error('Valid characters are "{}"'.format(valid_characters))
+    logging.error(
+        f'The extracted release name "{release_name}" contains invalid characters.'
+    )
+    logging.error(f'Valid characters are "{valid_characters}"')
     return False
 
   print(release_name)
@@ -89,9 +90,7 @@ def main():
   logging.getLogger().setLevel(logging.INFO)
 
   args = parse_arguments(sys.argv[1:])
-  if process_ref(args):
-    return EXIT_SUCCESS
-  return EXIT_FAILURE
+  return EXIT_SUCCESS if process_ref(args) else EXIT_FAILURE
 
 if __name__ == '__main__':
   sys.exit(main())

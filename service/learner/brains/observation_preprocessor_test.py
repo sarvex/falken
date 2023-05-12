@@ -234,22 +234,19 @@ class ObservationPreprocessorTest(parameterized.TestCase):
 
     if dir_mode == 'angle':
       want = [-math.pi/4, math.pi/4]  # -45, 45 degree in radians.
-      self.assertSequenceAlmostEqual(preprocessed[:len(want)], want, delta=0.05)
-      preprocessed = preprocessed[len(want):]
     else:
       assert dir_mode == 'unit_circle'
       v = 1 / math.sqrt(2)  # X and Y component of 45 degree 2D unit vec.
       want = [v, v, -v, v]
-      self.assertSequenceAlmostEqual(preprocessed[:len(want)], want, delta=0.05)
-      preprocessed = preprocessed[len(want):]
-
+    self.assertSequenceAlmostEqual(preprocessed[:len(want)], want, delta=0.05)
+    preprocessed = preprocessed[len(want):]
     if dist_mode == 'linear':
       want = [math.sqrt(3)]  # diagonal of the unit cube.
-      self.assertSequenceAlmostEqual(want, preprocessed, delta=0.05)
     else:
       assert dist_mode == 'log_plus_one'
       want = [math.log(math.sqrt(3) + 1)]
-      self.assertSequenceAlmostEqual(want, preprocessed, delta=0.05)
+
+    self.assertSequenceAlmostEqual(want, preprocessed, delta=0.05)
 
 
 if __name__ == '__main__':

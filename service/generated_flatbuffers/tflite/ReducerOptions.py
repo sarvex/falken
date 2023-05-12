@@ -78,5 +78,4 @@ class ReducerOptionsT(object):
     def Pack(self, builder):
         ReducerOptionsStart(builder)
         ReducerOptionsAddKeepDims(builder, self.keepDims)
-        reducerOptions = ReducerOptionsEnd(builder)
-        return reducerOptions
+        return ReducerOptionsEnd(builder)

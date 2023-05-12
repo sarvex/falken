@@ -68,5 +68,4 @@ class RankOptionsT(object):
     # RankOptionsT
     def Pack(self, builder):
         RankOptionsStart(builder)
-        rankOptions = RankOptionsEnd(builder)
-        return rankOptions
+        return RankOptionsEnd(builder)

@@ -84,9 +84,8 @@ class DemonstrationBufferTest(absltest.TestCase):
           demonstration_buffer.StepPhase.ABORTED):
         demo_buffer.record_step(step)
 
-    frame_count = 0
-    for _, frames in demo_buffer.flush_episode_demonstrations():
-      frame_count += frames
+    frame_count = sum(
+        frames for _, frames in demo_buffer.flush_episode_demonstrations())
     self.assertEqual(frame_count,
                      (self._EPISODE_LENGTH - 1) * self._NUMBER_OF_EPISODES)
 
@@ -210,13 +209,12 @@ class DemonstrationBufferTest(absltest.TestCase):
   @mock.patch.object(demonstration_buffer, 'batch_trajectories')
   def testEpisodesToTrajectories(self, mock_batch_trajectories):
     """Test converting episodes to batched trajectories."""
-    episode_step_generators = []
     number_of_steps = 5
-    for i in range(2):
-      episode_step_generators.append(
-          self._generate_episode_steps(
-              i, number_of_steps, demonstration_buffer.StepPhase.SUCCESS))
-
+    episode_step_generators = [
+        self._generate_episode_steps(i, number_of_steps,
+                                     demonstration_buffer.StepPhase.SUCCESS)
+        for i in range(2)
+    ]
     mock_trajectories = [42, 21]
     mock_batch_trajectories.side_effect = lambda _: mock_trajectories.pop(0)
     trajectories_and_sizes = list(demonstration_buffer.episodes_to_trajectories(

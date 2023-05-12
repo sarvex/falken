@@ -327,9 +327,7 @@ class AssignmentMonitor(_AssignmentMonitorBase):
                 self._acquired_assignment_lock_file,
                 _ASSIGNMENT_EXPIRATION_SECONDS)
 
-            chunks = self._pop_episode_chunks(self._acquired_assignment_id)
-
-            if chunks:
+            if chunks := self._pop_episode_chunks(self._acquired_assignment_id):
               callback = lambda: self._chunk_callback(  # pylint: disable=g-long-lambda
                   self._acquired_assignment_id, chunks)  # pylint: disable=cell-var-from-loop
           else:
@@ -371,12 +369,14 @@ class AssignmentMonitor(_AssignmentMonitorBase):
       except ValueError:
         raise ValueError(f'Failed to parse {chunk_id} as an int, for file {f}.')
 
-      chunks.append(resource_id.FalkenResourceId(
-          project=assignment_id.project,
-          brain=assignment_id.brain,
-          session=assignment_id.session,
-          episode=episode_id,
-          chunk=int(chunk_id)))
+      chunks.append(
+          resource_id.FalkenResourceId(
+              project=assignment_id.project,
+              brain=assignment_id.brain,
+              session=assignment_id.session,
+              episode=episode_id,
+              chunk=chunk_id,
+          ))
 
     return chunks
 

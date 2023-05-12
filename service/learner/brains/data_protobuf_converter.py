@@ -141,8 +141,8 @@ class DataProtobufConverter:
           observation_pb2.Feeler: DataProtobufConverter._feeler_to_tensor,
           action_pb2.Joystick: DataProtobufConverter._joystick_to_tensor,
       }
-    converter = DataProtobufConverter._DATA_PROTO_CLASS_TO_CONVERTER.get(
-        type(data))
-    if not converter:
+    if converter := DataProtobufConverter._DATA_PROTO_CLASS_TO_CONVERTER.get(
+        type(data)):
+      return converter(data)
+    else:
       raise ConversionError(f'Failed to convert {name} ({data}) to a tensor.')
-    return converter(data)

@@ -78,5 +78,4 @@ class DivOptionsT(object):
     def Pack(self, builder):
         DivOptionsStart(builder)
         DivOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
-        divOptions = DivOptionsEnd(builder)
-        return divOptions
+        return DivOptionsEnd(builder)

@@ -16,6 +16,7 @@
 
 """Tests for the cmake builder script."""
 
+
 import multiprocessing
 import os
 import subprocess
@@ -41,11 +42,10 @@ CMAKE_DOWNLOAD_URL_BASE = (
 # Default CMake installer URL for the host operating system.
 CMAKE_INSTALLER_URL_BY_HOST_PLATFORM = {
     'darwin':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-Darwin-x86_64.dmg'),
+    f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-Darwin-x86_64.dmg',
     'linux':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-Linux-x86_64.sh'),
-    'win32':
-        (CMAKE_DOWNLOAD_URL_BASE + f'/cmake-{CMAKE_VERSION}-win64-x64.zip'),
+    f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-Linux-x86_64.sh',
+    'win32': f'{CMAKE_DOWNLOAD_URL_BASE}/cmake-{CMAKE_VERSION}-win64-x64.zip',
 }
 
 CMAKE_DEFAULT_BUILD_CONFIGS = ['Debug', 'Release']

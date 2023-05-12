@@ -68,5 +68,4 @@ class TransposeOptionsT(object):
     # TransposeOptionsT
     def Pack(self, builder):
         TransposeOptionsStart(builder)
-        transposeOptions = TransposeOptionsEnd(builder)
-        return transposeOptions
+        return TransposeOptionsEnd(builder)

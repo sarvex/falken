@@ -68,5 +68,4 @@ class HashtableFindOptionsT(object):
     # HashtableFindOptionsT
     def Pack(self, builder):
         HashtableFindOptionsStart(builder)
-        hashtableFindOptions = HashtableFindOptionsEnd(builder)
-        return hashtableFindOptions
+        return HashtableFindOptionsEnd(builder)

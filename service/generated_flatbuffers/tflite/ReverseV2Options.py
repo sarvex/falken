@@ -68,5 +68,4 @@ class ReverseV2OptionsT(object):
     # ReverseV2OptionsT
     def Pack(self, builder):
         ReverseV2OptionsStart(builder)
-        reverseV2Options = ReverseV2OptionsEnd(builder)
-        return reverseV2Options
+        return ReverseV2OptionsEnd(builder)

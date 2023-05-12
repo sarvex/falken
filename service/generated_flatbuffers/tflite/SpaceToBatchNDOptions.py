@@ -68,5 +68,4 @@ class SpaceToBatchNDOptionsT(object):
     # SpaceToBatchNDOptionsT
     def Pack(self, builder):
         SpaceToBatchNDOptionsStart(builder)
-        spaceToBatchNDOptions = SpaceToBatchNDOptionsEnd(builder)
-        return spaceToBatchNDOptions
+        return SpaceToBatchNDOptionsEnd(builder)

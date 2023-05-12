@@ -746,10 +746,11 @@ class SubmitEpisodeChunksHandlerTest(parameterized.TestCase):
 
       expected_notifications = []
       for assignment in expected_assignments:
-        for _ in self._chunks():
-          expected_notifications.append(mock.call(
-              self._data_store.to_resource_id(assignment),
-              self._data_store.to_resource_id(self._data_store_chunk())))
+        expected_notifications.extend(
+            mock.call(
+                self._data_store.to_resource_id(assignment),
+                self._data_store.to_resource_id(self._data_store_chunk()),
+            ) for _ in self._chunks())
       mock_notifier.trigger_assignment_notification.assert_has_calls(
           expected_notifications)
     else:

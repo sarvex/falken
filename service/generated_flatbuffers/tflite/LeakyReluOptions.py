@@ -78,5 +78,4 @@ class LeakyReluOptionsT(object):
     def Pack(self, builder):
         LeakyReluOptionsStart(builder)
         LeakyReluOptionsAddAlpha(builder, self.alpha)
-        leakyReluOptions = LeakyReluOptionsEnd(builder)
-        return leakyReluOptions
+        return LeakyReluOptionsEnd(builder)

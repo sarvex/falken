@@ -334,10 +334,12 @@ class AssignmentProcessor:
     Returns:
       The number of demo frames contained in the provided chunks.
     """
-    falken_logging.info('Adding {} new chunks.'.format(len(chunks)),
-                        project_id=self._write_assignment.project_id,
-                        brain_id=self._write_assignment.brain_id,
-                        session_id=self._write_assignment.session_id)
+    falken_logging.info(
+        f'Adding {len(chunks)} new chunks.',
+        project_id=self._write_assignment.project_id,
+        brain_id=self._write_assignment.brain_id,
+        session_id=self._write_assignment.session_id,
+    )
 
     demo_frames = 0
 

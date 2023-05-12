@@ -100,5 +100,4 @@ class SkipGramOptionsT(object):
         SkipGramOptionsAddNgramSize(builder, self.ngramSize)
         SkipGramOptionsAddMaxSkipSize(builder, self.maxSkipSize)
         SkipGramOptionsAddIncludeAllNgrams(builder, self.includeAllNgrams)
-        skipGramOptions = SkipGramOptionsEnd(builder)
-        return skipGramOptions
+        return SkipGramOptionsEnd(builder)

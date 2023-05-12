@@ -68,5 +68,4 @@ class MatrixDiagOptionsT(object):
     # MatrixDiagOptionsT
     def Pack(self, builder):
         MatrixDiagOptionsStart(builder)
-        matrixDiagOptions = MatrixDiagOptionsEnd(builder)
-        return matrixDiagOptions
+        return MatrixDiagOptionsEnd(builder)

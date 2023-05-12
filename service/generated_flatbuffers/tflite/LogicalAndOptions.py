@@ -68,5 +68,4 @@ class LogicalAndOptionsT(object):
     # LogicalAndOptionsT
     def Pack(self, builder):
         LogicalAndOptionsStart(builder)
-        logicalAndOptions = LogicalAndOptionsEnd(builder)
-        return logicalAndOptions
+        return LogicalAndOptionsEnd(builder)

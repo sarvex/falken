@@ -68,5 +68,4 @@ class NonMaxSuppressionV4OptionsT(object):
     # NonMaxSuppressionV4OptionsT
     def Pack(self, builder):
         NonMaxSuppressionV4OptionsStart(builder)
-        nonMaxSuppressionV4Options = NonMaxSuppressionV4OptionsEnd(builder)
-        return nonMaxSuppressionV4Options
+        return NonMaxSuppressionV4OptionsEnd(builder)

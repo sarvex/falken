@@ -78,5 +78,4 @@ class SplitOptionsT(object):
     def Pack(self, builder):
         SplitOptionsStart(builder)
         SplitOptionsAddNumSplits(builder, self.numSplits)
-        splitOptions = SplitOptionsEnd(builder)
-        return splitOptions
+        return SplitOptionsEnd(builder)

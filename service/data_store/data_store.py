@@ -159,10 +159,9 @@ class _ResourceResolver(resource_store.ResourceResolver):
       A pair (accessor_id, element_id) for a FalkenResourceId that corresponds
       to the input proto field assignment.
     """
-    if field_name == 'assignment_id':
-      if value != '*':  # Assignments only support '*' globs.
-        # We hash assignment_ids since they can get pretty long.
-        value = hashlib.sha256(value.encode('utf-8')).hexdigest()
+    if field_name == 'assignment_id' and value != '*':
+      # We hash assignment_ids since they can get pretty long.
+      value = hashlib.sha256(value.encode('utf-8')).hexdigest()
     if not field_name.endswith('_id'):
       raise ValueError(f'Unsupported proto field: {field_name}')
     return field_name[:-len('_id')], value
@@ -195,15 +194,12 @@ class _ResourceResolver(resource_store.ResourceResolver):
       accessor_name, element_id = self.encode_proto_field(key, proto_value)
       accessor_map[accessor_name] = element_id
 
-    # Check if the proto represents an attribute.
-    attribute_name = _ResourceResolver._ATTRIBUTE_MAP.get(
-        type(resource))
-    if attribute_name:
+    if attribute_name := _ResourceResolver._ATTRIBUTE_MAP.get(type(resource)):
       accessor_map[resource_id.ATTRIBUTE] = attribute_name
     if not accessor_map:
       raise ValueError(
-          'Could not determine resource id of resource of type ' +
-          f'{type(resource)}:\n===\n{resource}\n===')
+          f'Could not determine resource id of resource of type {type(resource)}:\n===\n{resource}\n==='
+      )
     return resource_id.FalkenResourceId(**accessor_map)
 
 

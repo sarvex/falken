@@ -107,12 +107,11 @@ class BrainSpec:
     observation_node = self.observation_spec.proto_node
     entities_by_name = {}
     for optional_field in OBSERVATION_OPTIONAL_ENTITIES:
-      entity_node = observation_node.child_by_proto_field_name(optional_field)
-      if entity_node:
+      if entity_node := observation_node.child_by_proto_field_name(
+          optional_field):
         entities_by_name[entity_node.name] = entity_node
-    global_entities = observation_node.child_by_proto_field_name(
-        'global_entities')
-    if global_entities:
+    if global_entities := observation_node.child_by_proto_field_name(
+        'global_entities'):
       for entity_node in global_entities.children:
         entities_by_name[entity_node.name] = entity_node
 
@@ -513,12 +512,13 @@ class ProtobufValidator:
           primitives_pb2.RotationType:
               ProtobufValidator._null_spec_check
       }
-    validator = ProtobufValidator._SPEC_PROTO_CLASS_TO_VALIDATOR.get(type(spec))
-    if not validator:
+    if validator := ProtobufValidator._SPEC_PROTO_CLASS_TO_VALIDATOR.get(
+        type(spec)):
+      validator(spec, path_prefix)
+    else:
       raise InvalidSpecError(
           f'Validator not found for {type(spec).__qualname__} at '
           f'"{path_prefix}".')
-    validator(spec, path_prefix)
 
   @staticmethod
   def _check_spec_proto_class(data, spec, spec_proto_class, path_prefix):
@@ -901,12 +901,12 @@ class ProtobufValidator:
           primitives_pb2.Position: ProtobufValidator._check_position,
           primitives_pb2.Rotation: ProtobufValidator._check_rotation,
       }
-    validator = (
-        ProtobufValidator._DATA_PROTO_CLASS_TO_VALIDATOR.get(type(data)))
-    if not validator:
+    if validator := (ProtobufValidator._DATA_PROTO_CLASS_TO_VALIDATOR.get(
+        type(data))):
+      validator(data, spec, path_prefix, check_spec_class)
+    else:
       raise TypingError(f'Validator not found for {type(data).__qualname__} at '
                         f'"{path_prefix}".')
-    validator(data, spec, path_prefix, check_spec_class)
 
 
 class ProtobufDataValidationOptions:
@@ -992,8 +992,7 @@ class ProtobufNode:
 
   def _update_path(self):
     """Update the human readable path of this node relative to ancestors."""
-    parent = self.parent
-    if parent:
+    if parent := self.parent:
       parent_path = parent._path  # pylint: disable=protected-access
       self._path = '/'.join([parent_path, self.name])
     else:
@@ -1056,11 +1055,8 @@ class ProtobufNode:
       return False
     if len(self.children) != len(other.children):
       return False
-    for this_child, other_child in zip(self.children, other.children):
-      if this_child == other_child:
-        continue
-      return False
-    return True
+    return all(this_child == other_child
+               for this_child, other_child in zip(self.children, other.children))
 
   def __ne__(self, other):
     """Compare for inequality with another ProtobufNode instance.
@@ -1095,8 +1091,7 @@ class ProtobufNode:
       Nested dictionary with leaf values referencing ProtobufNode instances that
       correspond to leaves in this tree.
     """
-    children = self.children
-    if children:
+    if children := self.children:
       child_nest = {}
       nest = {self.name: child_nest}
       for child in self.children:
@@ -1175,16 +1170,12 @@ class ProtobufNode:
         spec, name, parent_path)
     # Add top level "entity" node that is assigned the name of the entity.
     node = ProtobufNode(name, spec, proto_field_name)
-    # Add built-in fields and custom named fields as children.
-    fields = []
-    for field_name, field_proto in _get_optional_fields_from_proto(
-        spec, ENTITY_OPTIONAL_FIELDS):
-      fields.append((field_name, field_proto, field_name))
-
-    for _, field_name, field_proto in _label_repeated_field(
-        spec, 'entity_fields'):
-      fields.append((field_proto.name, field_proto, field_name))
-
+    fields = [(field_name, field_proto, field_name)
+              for field_name, field_proto in _get_optional_fields_from_proto(
+                  spec, ENTITY_OPTIONAL_FIELDS)]
+    fields.extend((field_proto.name, field_proto, field_name)
+                  for _, field_name, field_proto in _label_repeated_field(
+                      spec, 'entity_fields'))
     for node_name, field_proto, field_name in fields:
       node.add_children([ProtobufNode._from_spec(field_proto, node_name, path,
                                                  field_name)])
@@ -1335,12 +1326,12 @@ class ProtobufNode:
           primitives_pb2.RotationType: ProtobufNode._from_leaf_spec
       }
 
-    parser = ProtobufNode._SPEC_PROTOCLASS_TO_PARSER.get(type(spec))
-    if not parser:
+    if parser := ProtobufNode._SPEC_PROTOCLASS_TO_PARSER.get(type(spec)):
+      return parser(spec, name, parent_path, proto_field_name)
+    else:
       raise InvalidSpecError(
           f'Unknown spec type: {type(spec).__qualname__} ({spec} at '
           f'"{parent_path}")')
-    return parser(spec, name, parent_path, proto_field_name)
 
   @staticmethod
   def from_spec(spec, name=None, parent_path=None):
@@ -1416,8 +1407,8 @@ class ProtobufNode:
         data, OBSERVATION_OPTIONAL_ENTITIES):
       spec_node = self.child_by_proto_field_name(data_field_name)
       # pylint: disable=protected-access
-      child_nest.update(spec_node._entity_to_proto_nest(data_field_proto,
-                                                        mapper, False, options))
+      child_nest |= spec_node._entity_to_proto_nest(data_field_proto, mapper,
+                                                    False, options)
 
     if data.global_entities:
       global_entities_spec_node = self.child_by_proto_field_name(
@@ -1429,8 +1420,8 @@ class ProtobufNode:
         spec_node = global_entities_spec_node.child_by_proto_field_name(
             data_field_name)
         # pylint: disable=protected-access
-        global_entities_nest.update(spec_node._entity_to_proto_nest(
-            data_field_proto, mapper, False, options))
+        global_entities_nest |= spec_node._entity_to_proto_nest(
+            data_field_proto, mapper, False, options)
     return nest
 
   def _entity_to_proto_nest(self, data, mapper, check_spec_class, options):
@@ -1452,8 +1443,8 @@ class ProtobufNode:
         data, ENTITY_OPTIONAL_FIELDS):
       spec_node = self.child_by_proto_field_name(data_field_name)
       # pylint: disable=protected-access
-      child_nest.update(spec_node._data_to_proto_nest(
-          data_field_proto, mapper, False, options))
+      child_nest |= spec_node._data_to_proto_nest(data_field_proto, mapper,
+                                                  False, options)
 
     for i, data_field_name, data_field_proto in _label_repeated_field(
         data, 'entity_fields'):
@@ -1489,9 +1480,12 @@ class ProtobufNode:
                                    self.proto.actions[i],
                                    spec_node.path, False)
       # pylint: disable=protected-access
-      child_nest.update(spec_node._data_to_proto_nest(
+      child_nest |= spec_node._data_to_proto_nest(
           getattr(data_field_proto, data_field_proto.WhichOneof('action')),
-          mapper, False, options))
+          mapper,
+          False,
+          options,
+      )
     return nest
 
   def _data_to_proto_nest(self, data, mapper, check_spec_class, options):
@@ -1513,7 +1507,6 @@ class ProtobufNode:
       TypingError: If the data protobuf does not conform this node's spec
         protobuf.
     """
-    mapper = mapper if mapper else lambda data, path: data
     proto_class_to_parser = {
         primitives_pb2.Category: self._leaf_data_to_proto_nest,
         primitives_pb2.Number: self._leaf_data_to_proto_nest,
@@ -1525,11 +1518,12 @@ class ProtobufNode:
         observation_pb2.Entity: self._entity_to_proto_nest,
         action_pb2.ActionData: self._action_data_to_proto_nest,
     }
-    parser = proto_class_to_parser.get(type(data))
-    if not parser:
+    if parser := proto_class_to_parser.get(type(data)):
+      mapper = mapper if mapper else lambda data, path: data
+      return parser(data, mapper, check_spec_class, options)
+    else:
       raise TypingError(f'Data proto {type(data).__qualname__} is not '
                         'supported.')
-    return parser(data, mapper, check_spec_class, options)
 
   def data_to_proto_nest(self, data, mapper=None, options=None):
     """Convert the provided data into a dictionary tree (nest) of protos.

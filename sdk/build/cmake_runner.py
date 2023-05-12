@@ -119,10 +119,11 @@ class CMakeRunner:
     Returns:
       CMake architecture name or an empty string if there is no default.
     """
-    for regex, architecture in ARCHITECTURE_BY_GENERATOR_RE:
-      if regex.match(generator):
-        return architecture
-    return ''
+    return next(
+        (architecture for regex, architecture in ARCHITECTURE_BY_GENERATOR_RE
+         if regex.match(generator)),
+        '',
+    )
 
   @property
   def _is_multi_config_generator(self) -> bool:
@@ -131,7 +132,7 @@ class CMakeRunner:
     Returns:
       True if the generator supports multiple projects, False otherwise.
     """
-    return True if MULTI_CONFIG_GENERATOR_RE.match(self._generator) else False
+    return bool(MULTI_CONFIG_GENERATOR_RE.match(self._generator))
 
   @property
   def build_config_dir(self) -> str:
@@ -181,9 +182,8 @@ class CMakeRunner:
 
     command_args = []
     if properties:
-      for key, value in properties.items():
-        if value:
-          command_args.append(f'-D{key}={value}')
+      command_args.extend(f'-D{key}={value}'
+                          for key, value in properties.items() if value)
     if falken_json_config_file:
       command_args.append(
           f'-DFALKEN_JSON_CONFIG_FILE={falken_json_config_file}')
@@ -252,8 +252,7 @@ class CMakeRunner:
                                stdout=subprocess.PIPE, encoding='utf-8')
     sys.stdout.write(result.stdout)
     for line in result.stdout.splitlines():
-      match = CMakeRunner.CPACK_PACKAGE_RE.match(line)
-      if match:
+      if match := CMakeRunner.CPACK_PACKAGE_RE.match(line):
         return match.groups()[0]
     raise RuntimeError(f'Package not found in CPack output\n{result.stdout}')
 

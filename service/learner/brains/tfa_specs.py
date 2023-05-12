@@ -180,9 +180,10 @@ class ProtobufNodeTfaSpecConverter:
         observation_pb2.FeelerType: self._feeler_type_to_tfa_tensor_spec,
         action_pb2.JoystickType: self._joystick_type_to_tfa_tensor_spec
     }
-    converter = proto_class_to_converter.get(type(self._protobuf_node.proto))
-    if not converter:
+    if converter := proto_class_to_converter.get(type(
+        self._protobuf_node.proto)):
+      return converter()
+    else:
       raise specs.InvalidSpecError(
           f'Unable to convert {type(self._protobuf_node.proto).__qualname__} '
           f'at "{self._protobuf_node.path}" to TensorSpec.')
-    return converter()

@@ -68,5 +68,4 @@ class LogicalNotOptionsT(object):
     # LogicalNotOptionsT
     def Pack(self, builder):
         LogicalNotOptionsStart(builder)
-        logicalNotOptions = LogicalNotOptionsEnd(builder)
-        return logicalNotOptions
+        return LogicalNotOptionsEnd(builder)

@@ -89,5 +89,4 @@ class WhileOptionsT(object):
         WhileOptionsStart(builder)
         WhileOptionsAddCondSubgraphIndex(builder, self.condSubgraphIndex)
         WhileOptionsAddBodySubgraphIndex(builder, self.bodySubgraphIndex)
-        whileOptions = WhileOptionsEnd(builder)
-        return whileOptions
+        return WhileOptionsEnd(builder)

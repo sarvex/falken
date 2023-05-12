@@ -99,15 +99,12 @@ class Learner:
     Returns:
       Assignment proto or None if no assignments are available.
     """
-    assignment_proto = self._assignment_path_as_proto
-    if assignment_proto:
+    if assignment_proto := self._assignment_path_as_proto:
       return assignment_proto
 
     falken_logging.info('Waiting for assignment.')
     assignment = self._storage.receive_assignment(timeout=timeout)
-    if assignment is None:
-      return None
-    return assignment
+    return None if assignment is None else assignment
 
   def process_assignment(self, timeout=_DEFAULT_ASSIGNMENT_PROCESSING_TIMEOUT):
     """Processes an assignment, and returns the assignment stats."""
@@ -119,8 +116,8 @@ class Learner:
       self.stop_process_assignment()
       if status != assignment_processor.ProcessAssignmentStatus.FINISHED:
         raise RuntimeError(
-            'Unexpected ProcessAssignment status "%s" with metadata "%s"' %
-            (status, metadata))
+            f'Unexpected ProcessAssignment status "{status}" with metadata "{metadata}"'
+        )
     return metadata
 
   def shutdown(self):
@@ -261,14 +258,13 @@ class Learner:
         session_id=read_assignment.session_id,
         assignment_id=read_assignment.assignment_id)
     with assignment_processor.AssignmentProcessor(
-        read_assignment, self._file, self._storage, self._brain_cache,
-        get_session_state=((lambda: storage.SessionState.IN_PROGRESS)
-                           if self._assignment_path else None),
-        write_assignment=write_assignment,
-        always_block_when_fetching=self._always_block_when_fetching) as proc:
+          read_assignment, self._file, self._storage, self._brain_cache,
+          get_session_state=((lambda: storage.SessionState.IN_PROGRESS)
+                             if self._assignment_path else None),
+          write_assignment=write_assignment,
+          always_block_when_fetching=self._always_block_when_fetching) as proc:
       try:
-        for y in proc.process():
-          yield y
+        yield from proc.process()
         falken_logging.info(
             'Processed assignment.',
             brain_id=read_assignment.brain_id,

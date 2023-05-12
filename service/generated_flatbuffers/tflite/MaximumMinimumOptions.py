@@ -68,5 +68,4 @@ class MaximumMinimumOptionsT(object):
     # MaximumMinimumOptionsT
     def Pack(self, builder):
         MaximumMinimumOptionsStart(builder)
-        maximumMinimumOptions = MaximumMinimumOptionsEnd(builder)
-        return maximumMinimumOptions
+        return MaximumMinimumOptionsEnd(builder)

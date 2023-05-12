@@ -108,8 +108,7 @@ def run_api(current_path: str):
   for hyperparameters in FLAGS.hyperparameters:
     args.extend(['--hyperparameters', hyperparameters])
   for project_id in FLAGS.project_ids:
-    args.append('--project_ids')
-    args.append(project_id)
+    args.extend(('--project_ids', project_id))
   return subprocess.Popen(args, env=os.environ, cwd=current_path)
 
 

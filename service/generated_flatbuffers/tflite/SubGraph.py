@@ -54,9 +54,7 @@ class SubGraph(object):
     # SubGraph
     def TensorsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SubGraph
     def TensorsIsNone(self):
@@ -81,9 +79,7 @@ class SubGraph(object):
     # SubGraph
     def InputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SubGraph
     def InputsIsNone(self):
@@ -108,9 +104,7 @@ class SubGraph(object):
     # SubGraph
     def OutputsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SubGraph
     def OutputsIsNone(self):
@@ -133,9 +127,7 @@ class SubGraph(object):
     # SubGraph
     def OperatorsLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.VectorLen(o)
-        return 0
+        return self._tab.VectorLen(o) if o != 0 else 0
 
     # SubGraph
     def OperatorsIsNone(self):
@@ -145,9 +137,7 @@ class SubGraph(object):
     # SubGraph
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+        return self._tab.String(o + self._tab.Pos) if o != 0 else None
 
 def SubGraphStart(builder): builder.StartObject(5)
 def SubGraphAddTensors(builder, tensors): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tensors), 0)
@@ -202,18 +192,18 @@ class SubGraphT(object):
                 else:
                     tensor_ = tflite.Tensor.TensorT.InitFromObj(subGraph.Tensors(i))
                     self.tensors.append(tensor_)
-        if not subGraph.InputsIsNone():
-            if np is None:
+        if np is None:
+            if not subGraph.InputsIsNone():
                 self.inputs = []
-                for i in range(subGraph.InputsLength()):
-                    self.inputs.append(subGraph.Inputs(i))
-            else:
-                self.inputs = subGraph.InputsAsNumpy()
+                self.inputs.extend(subGraph.Inputs(i) for i in range(subGraph.InputsLength()))
+        elif not subGraph.InputsIsNone():
+            self.inputs = subGraph.InputsAsNumpy()
         if not subGraph.OutputsIsNone():
             if np is None:
                 self.outputs = []
-                for i in range(subGraph.OutputsLength()):
-                    self.outputs.append(subGraph.Outputs(i))
+                self.outputs.extend(
+                    subGraph.Outputs(i) for i in range(subGraph.OutputsLength())
+                )
             else:
                 self.outputs = subGraph.OutputsAsNumpy()
         if not subGraph.OperatorsIsNone():
@@ -229,9 +219,7 @@ class SubGraphT(object):
     # SubGraphT
     def Pack(self, builder):
         if self.tensors is not None:
-            tensorslist = []
-            for i in range(len(self.tensors)):
-                tensorslist.append(self.tensors[i].Pack(builder))
+            tensorslist = [self.tensors[i].Pack(builder) for i in range(len(self.tensors))]
             SubGraphStartTensorsVector(builder, len(self.tensors))
             for i in reversed(range(len(self.tensors))):
                 builder.PrependUOffsetTRelative(tensorslist[i])
@@ -253,9 +241,9 @@ class SubGraphT(object):
                     builder.PrependInt32(self.outputs[i])
                 outputs = builder.EndVector(len(self.outputs))
         if self.operators is not None:
-            operatorslist = []
-            for i in range(len(self.operators)):
-                operatorslist.append(self.operators[i].Pack(builder))
+            operatorslist = [
+                self.operators[i].Pack(builder) for i in range(len(self.operators))
+            ]
             SubGraphStartOperatorsVector(builder, len(self.operators))
             for i in reversed(range(len(self.operators))):
                 builder.PrependUOffsetTRelative(operatorslist[i])
@@ -273,5 +261,4 @@ class SubGraphT(object):
             SubGraphAddOperators(builder, operators)
         if self.name is not None:
             SubGraphAddName(builder, name)
-        subGraph = SubGraphEnd(builder)
-        return subGraph
+        return SubGraphEnd(builder)

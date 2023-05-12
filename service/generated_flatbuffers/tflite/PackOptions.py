@@ -89,5 +89,4 @@ class PackOptionsT(object):
         PackOptionsStart(builder)
         PackOptionsAddValuesCount(builder, self.valuesCount)
         PackOptionsAddAxis(builder, self.axis)
-        packOptions = PackOptionsEnd(builder)
-        return packOptions
+        return PackOptionsEnd(builder)

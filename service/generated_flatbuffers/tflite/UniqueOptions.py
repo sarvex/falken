@@ -78,5 +78,4 @@ class UniqueOptionsT(object):
     def Pack(self, builder):
         UniqueOptionsStart(builder)
         UniqueOptionsAddIdxOutType(builder, self.idxOutType)
-        uniqueOptions = UniqueOptionsEnd(builder)
-        return uniqueOptions
+        return UniqueOptionsEnd(builder)

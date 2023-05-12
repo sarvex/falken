@@ -89,5 +89,4 @@ class GatherOptionsT(object):
         GatherOptionsStart(builder)
         GatherOptionsAddAxis(builder, self.axis)
         GatherOptionsAddBatchDims(builder, self.batchDims)
-        gatherOptions = GatherOptionsEnd(builder)
-        return gatherOptions
+        return GatherOptionsEnd(builder)

@@ -186,18 +186,16 @@ def _create_or_use_existing_snapshot(
     FileNotFoundError, InternalError for issues while writing the snapshot.
     ValueError for issues while getting starting snapshot IDs.
   """
-  if model_resource_id:
-    # Use model ID for new snapshot.
-    model = data_store.read(model_resource_id)
-    return _create_snapshot(session_resource_id, starting_snapshots,
-                            model_resource_id, model.model_path, data_store)
-  else:
+  if not model_resource_id:
     # Return existing snapshot. Callers with expect_starting_snapshot True will
     # raise ValueError if the len(starting_shots) != 1.
-    if len(starting_snapshots) == 1 or expect_starting_snapshot:
-      return _single_starting_snapshot(
-          session_resource_id, starting_snapshots)
-    return ''
+    return (_single_starting_snapshot(session_resource_id, starting_snapshots)
+            if len(starting_snapshots) == 1 or expect_starting_snapshot else
+            '')
+  # Use model ID for new snapshot.
+  model = data_store.read(model_resource_id)
+  return _create_snapshot(session_resource_id, starting_snapshots,
+                          model_resource_id, model.model_path, data_store)
 
 
 def _create_snapshot(session_resource_id, starting_snapshots,

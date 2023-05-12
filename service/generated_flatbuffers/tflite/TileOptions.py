@@ -68,5 +68,4 @@ class TileOptionsT(object):
     # TileOptionsT
     def Pack(self, builder):
         TileOptionsStart(builder)
-        tileOptions = TileOptionsEnd(builder)
-        return tileOptions
+        return TileOptionsEnd(builder)

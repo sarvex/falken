@@ -78,5 +78,4 @@ class SplitVOptionsT(object):
     def Pack(self, builder):
         SplitVOptionsStart(builder)
         SplitVOptionsAddNumSplits(builder, self.numSplits)
-        splitVOptions = SplitVOptionsEnd(builder)
-        return splitVOptions
+        return SplitVOptionsEnd(builder)

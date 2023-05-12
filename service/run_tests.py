@@ -128,9 +128,8 @@ def _add_module_test_classes_to_module(test_classes, search_module,
     add_to_module: Module to add test classes to.
   """
   for name, value in vars(search_module).items():
-    if inspect.isclass(value):
-      if issubclass(value, test_classes):
-        vars(add_to_module)[name] = value
+    if inspect.isclass(value) and issubclass(value, test_classes):
+      vars(add_to_module)[name] = value
 
 
 def run_absltests(modules_to_test, num_shards, shard_index):
@@ -207,11 +206,9 @@ def main(unused_argv):
           run_absltests, [(FLAGS.modules_to_test, FLAGS.num_shards, i)
                           for i in range(FLAGS.num_shards)])
 
-    failing_shards = []
-    for i, status_code in enumerate(result_statuses):
-      if status_code:
-        failing_shards.append(i)
-    if failing_shards:
+    if failing_shards := [
+        i for i, status_code in enumerate(result_statuses) if status_code
+    ]:
       logging.info('FAILED. Failing shard indices: %s', failing_shards)
       sys.exit(1)
     else:

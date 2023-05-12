@@ -68,5 +68,4 @@ class RangeOptionsT(object):
     # RangeOptionsT
     def Pack(self, builder):
         RangeOptionsStart(builder)
-        rangeOptions = RangeOptionsEnd(builder)
-        return rangeOptions
+        return RangeOptionsEnd(builder)

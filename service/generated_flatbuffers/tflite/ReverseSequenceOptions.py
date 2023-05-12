@@ -89,5 +89,4 @@ class ReverseSequenceOptionsT(object):
         ReverseSequenceOptionsStart(builder)
         ReverseSequenceOptionsAddSeqDim(builder, self.seqDim)
         ReverseSequenceOptionsAddBatchDim(builder, self.batchDim)
-        reverseSequenceOptions = ReverseSequenceOptionsEnd(builder)
-        return reverseSequenceOptions
+        return ReverseSequenceOptionsEnd(builder)

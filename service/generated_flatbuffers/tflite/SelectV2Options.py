@@ -68,5 +68,4 @@ class SelectV2OptionsT(object):
     # SelectV2OptionsT
     def Pack(self, builder):
         SelectV2OptionsStart(builder)
-        selectV2Options = SelectV2OptionsEnd(builder)
-        return selectV2Options
+        return SelectV2OptionsEnd(builder)

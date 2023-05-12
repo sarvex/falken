@@ -68,5 +68,4 @@ class ZerosLikeOptionsT(object):
     # ZerosLikeOptionsT
     def Pack(self, builder):
         ZerosLikeOptionsStart(builder)
-        zerosLikeOptions = ZerosLikeOptionsEnd(builder)
-        return zerosLikeOptions
+        return ZerosLikeOptionsEnd(builder)

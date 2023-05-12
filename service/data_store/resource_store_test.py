@@ -203,7 +203,7 @@ class ResourceStoreTest(parameterized.TestCase):
     self._mock_resource_resolver.resolve_attribute_name.return_value = (
         'anattribute')
     self._mock_resource_resolver.encode_proto_field.side_effect = (
-        lambda field, value: (field + '_id', value.upper()))
+        lambda field, value: (f'{field}_id', value.upper()))
 
     rid = self._resource_store.resource_id_from_proto_ids(
         attribute_type=mock_attribute_type, **proto_ids)

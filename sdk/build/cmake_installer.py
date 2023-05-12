@@ -137,11 +137,11 @@ def find_installer_class(installer_filename: str) -> typing.Type[Installer]:
                 '.sh': ShellScriptInstaller,
                 '.zip': ZipInstaller}
   extension = os.path.splitext(installer_filename)[1]
-  installer_class = installers.get(extension)
-  if not installer_class:
+  if installer_class := installers.get(extension):
+    return installer_class
+  else:
     raise NotImplementedError(f'Installer for {installer_filename} '
                               'not available')
-  return installer_class
 
 
 class CMakeInstaller:

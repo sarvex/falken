@@ -68,5 +68,4 @@ class WhereOptionsT(object):
     # WhereOptionsT
     def Pack(self, builder):
         WhereOptionsStart(builder)
-        whereOptions = WhereOptionsEnd(builder)
-        return whereOptions
+        return WhereOptionsEnd(builder)

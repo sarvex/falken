@@ -137,9 +137,7 @@ def _get_global_entities(nest):
     A list of strings, representing the indices / IDs of each global entity.
   """
   entities = nest.get('global_entities', None)
-  if not entities:
-    return []
-  return list(entities.keys())
+  return [] if not entities else list(entities.keys())
 
 
 class InvalidSpecError(Exception):
@@ -190,9 +188,7 @@ class EgocentricDirectionToEntity(network.Network):
   def _get_controlled_entities(self):
     """Return names of entities controlled by joystick actions."""
     def _get_controlled_entity(x):
-      if isinstance(x, action_pb2.JoystickType):
-        return x.controlled_entity
-      return None
+      return x.controlled_entity if isinstance(x, action_pb2.JoystickType) else None
 
     # Map each Joystick action to its controlled_entity (or None, if not a
     # Joystick action).

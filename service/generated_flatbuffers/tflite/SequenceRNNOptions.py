@@ -100,5 +100,4 @@ class SequenceRNNOptionsT(object):
         SequenceRNNOptionsAddTimeMajor(builder, self.timeMajor)
         SequenceRNNOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         SequenceRNNOptionsAddAsymmetricQuantizeInputs(builder, self.asymmetricQuantizeInputs)
-        sequenceRNNOptions = SequenceRNNOptionsEnd(builder)
-        return sequenceRNNOptions
+        return SequenceRNNOptionsEnd(builder)

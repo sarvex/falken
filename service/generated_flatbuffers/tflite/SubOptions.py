@@ -89,5 +89,4 @@ class SubOptionsT(object):
         SubOptionsStart(builder)
         SubOptionsAddFusedActivationFunction(builder, self.fusedActivationFunction)
         SubOptionsAddPotScaleInt16(builder, self.potScaleInt16)
-        subOptions = SubOptionsEnd(builder)
-        return subOptions
+        return SubOptionsEnd(builder)

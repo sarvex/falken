@@ -40,8 +40,7 @@ class ModelScoresTest(absltest.TestCase):
     scores.add_score('model_id_1', 0.2)
     scores.add_score('model_id_2', -0.2)
     scores.add_score('model_id_2', 0.9)
-    self.assertEqual(scores.model_ids,
-                     set(['model_id_0', 'model_id_1', 'model_id_2']))
+    self.assertEqual(scores.model_ids, {'model_id_0', 'model_id_1', 'model_id_2'})
 
   def test_remove_model(self):
     scores = model_selection_record.ModelScores()
@@ -105,9 +104,8 @@ class OfflineEvaluationByAssignmentAndEvalIdTest(absltest.TestCase):
         'model_id_2', -22.0)
     scores[model_selection_record.AssignmentEvalId('a2', 1)].add_score(
         'model_id_3', -0.2)
-    self.assertEqual(
-        scores.model_ids_for_assignment_id('a0'),
-        set(['model_id_0', 'model_id_1']))
+    self.assertEqual(scores.model_ids_for_assignment_id('a0'),
+                     {'model_id_0', 'model_id_1'})
 
   def test_assignment_ids(self):
     scores = model_selection_record.OfflineEvaluationByAssignmentAndEvalId()
@@ -119,7 +117,7 @@ class OfflineEvaluationByAssignmentAndEvalIdTest(absltest.TestCase):
         'model_id_2', -22.0)
     scores[model_selection_record.AssignmentEvalId('a2', 1)].add_score(
         'model_id_3', -0.2)
-    self.assertEqual(scores.assignment_ids, set(['a0', 'a2']))
+    self.assertEqual(scores.assignment_ids, {'a0', 'a2'})
 
   def test_remove_model(self):
     scores = model_selection_record.OfflineEvaluationByAssignmentAndEvalId()

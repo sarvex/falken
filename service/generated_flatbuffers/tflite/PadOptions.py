@@ -68,5 +68,4 @@ class PadOptionsT(object):
     # PadOptionsT
     def Pack(self, builder):
         PadOptionsStart(builder)
-        padOptions = PadOptionsEnd(builder)
-        return padOptions
+        return PadOptionsEnd(builder)
